@@ -118,7 +118,10 @@ model Message {
   type       String   @default("text")
   content    String?  @db.Text
   mediaUrl   String?
+  mediaKey   String?  // WhatsApp HKDF decryption key (base64)
+  mimetype   String?  // MIME type del archivo multimedia
   caption    String?
+  senderName String?  // Nombre del remitente en mensajes de grupo
   status     String   @default("SENT")
   timestamp  DateTime
   createdAt  DateTime @default(now())

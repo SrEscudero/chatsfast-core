@@ -67,6 +67,8 @@ export const instancesApi = {
   getStatus:  (id: string) => api.get(`/instances/${id}/status`),
   getWebhook: (id: string) => api.get(`/instances/${id}/webhook`),
   setWebhook: (id: string, data: Record<string, unknown>) => api.put(`/instances/${id}/webhook`, data),
+  getSettings: (id: string) => api.get(`/instances/${id}/settings`),
+  setSettings: (id: string, data: Record<string, unknown>) => api.put(`/instances/${id}/settings`, data),
 };
 
 export const clientsApi = {
@@ -84,6 +86,8 @@ export const contactsApi = {
                  api.get(`/instances/${instanceId}/contacts`, { params }),
   sync:        (instanceId: string) =>
                  api.post(`/instances/${instanceId}/contacts/sync`),
+  startChat:   (instanceId: string, phone: string) =>
+                 api.post(`/instances/${instanceId}/contacts/start`, { phone }),
   getMessages: (instanceId: string, contactId: string, params?: Record<string, unknown>) =>
                  api.get(`/instances/${instanceId}/contacts/${contactId}/messages`, { params }),
   sendText:    (instanceId: string, to: string, text: string) =>
@@ -92,6 +96,10 @@ export const contactsApi = {
                  api.post(`/instances/${instanceId}/messages/media`, { number: to, mediatype, media, caption }),
   markAsRead:  (instanceId: string, remoteJid: string, messageIds: string[]) =>
                  api.post(`/instances/${instanceId}/chat/mark-read`, { remoteJid, messages: messageIds }),
+  sendPresence: (instanceId: string, number: string, presence: 'composing' | 'recording' | 'paused', delay?: number) =>
+                 api.post(`/instances/${instanceId}/chat/presence`, { number, presence, ...(delay ? { delay } : {}) }),
+  getMedia: (instanceId: string, contactId: string, messageId: string) =>
+                 api.get(`/instances/${instanceId}/contacts/${contactId}/messages/${messageId}/media`, { responseType: 'blob' }),
 };
 
 export const campaignsApi = {
@@ -105,11 +113,16 @@ export const campaignsApi = {
 };
 
 export const infraApi = {
+  getHealth:     () => api.get('/infra/health'),
   getMetrics:    () => api.get('/infra/metrics'),
   getContainers: () => api.get('/infra/containers'),
   restart:       (id: string) => api.post(`/infra/containers/${id}/restart`),
   stop:          (id: string) => api.post(`/infra/containers/${id}/stop`),
   start:         (id: string) => api.post(`/infra/containers/${id}/start`),
+  prune:         () => api.post('/infra/containers/prune'),
+  getDetail:     (id: string) => api.get(`/infra/containers/${id}/detail`),
+  getProcesses:  () => api.get('/infra/processes'),
+  getNetwork:    () => api.get('/infra/network'),
 };
 
 export const SSE_URLS = {

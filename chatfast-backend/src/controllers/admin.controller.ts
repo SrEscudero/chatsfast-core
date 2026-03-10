@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { adminService } from '../services/admin.service';
 import { ApiResponder } from '../utils/apiResponse';
-import { logger } from '../config/logger';
+import { logger, onLog, offLog } from '../config/logger';
 
 // ============================================================
 // SSE HELPERS
@@ -9,9 +9,6 @@ import { logger } from '../config/logger';
 
 /** Active SSE connections for /admin/instances/live */
 const liveClients = new Set<Response>();
-
-/** Active SSE connections for /admin/logs */
-const logClients = new Set<Response>();
 
 /**
  * Broadcast a JSON payload to all connected SSE clients in a set.
@@ -25,32 +22,6 @@ function broadcast(clients: Set<Response>, event: string, data: unknown): void {
       clients.delete(client);
     }
   }
-}
-
-/**
- * Winston transport that pipes log entries to all /admin/logs SSE clients.
- * Attached lazily on first SSE connection to avoid importing winston before
- * the logger is fully initialized.
- */
-let logTransportAttached = false;
-function attachLogTransport(): void {
-  if (logTransportAttached) return;
-  logTransportAttached = true;
-
-  // Patch logger.write to intercept all log entries
-  const originalWrite = (logger as any).write?.bind(logger);
-  if (!originalWrite) return;
-
-  (logger as any).write = (info: any, ...args: any[]) => {
-    if (logClients.size > 0) {
-      broadcast(logClients, 'log', {
-        level: info.level,
-        message: info.message,
-        timestamp: info.timestamp ?? new Date().toISOString(),
-      });
-    }
-    return originalWrite(info, ...args);
-  };
 }
 
 // ============================================================
@@ -183,13 +154,18 @@ class AdminController {
     res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders();
 
-    logClients.add(res);
-    attachLogTransport();
-
-    logger.debug('SSE client connected to /admin/logs', { total: logClients.size });
-
     // Send initial connected event
     res.write(`event: connected\ndata: ${JSON.stringify({ message: 'Log stream iniciado', timestamp: new Date().toISOString() })}\n\n`);
+
+    // Register listener — each log entry from Winston is forwarded to this client
+    const listener = (entry: { level: string; message: string; timestamp: string }) => {
+      try {
+        res.write(`event: log\ndata: ${JSON.stringify(entry)}\n\n`);
+      } catch { /* client disconnected */ }
+    };
+    onLog(listener);
+
+    logger.info('SSE client connected to /admin/logs');
 
     // Heartbeat every 30 seconds
     const interval = setInterval(() => {
@@ -197,14 +173,14 @@ class AdminController {
         res.write(': heartbeat\n\n');
       } catch {
         clearInterval(interval);
-        logClients.delete(res);
+        offLog(listener);
       }
     }, 30000);
 
     req.on('close', () => {
       clearInterval(interval);
-      logClients.delete(res);
-      logger.debug('SSE client disconnected from /admin/logs', { total: logClients.size });
+      offLog(listener);
+      logger.debug('SSE client disconnected from /admin/logs');
     });
   }
 }

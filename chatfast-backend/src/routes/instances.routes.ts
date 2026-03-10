@@ -1163,6 +1163,26 @@ router.put(
   asyncHandler(instanceController.updateWebhook)
 );
 
+// ----------------------------------------------------------------------------
+// GET /api/v1/instances/:id/settings
+// ----------------------------------------------------------------------------
+router.get(
+  '/:id/settings',
+  authenticate,
+  requireOwnership('id'),
+  asyncHandler(instanceController.getSettings.bind(instanceController)),
+);
+
+// ----------------------------------------------------------------------------
+// PUT /api/v1/instances/:id/settings
+// ----------------------------------------------------------------------------
+router.put(
+  '/:id/settings',
+  authenticate,
+  requireOwnership('id'),
+  asyncHandler(instanceController.updateSettings.bind(instanceController)),
+);
+
 // ============================================================================
 // 🏷️ EXPORTAR ROUTER
 // ============================================================================

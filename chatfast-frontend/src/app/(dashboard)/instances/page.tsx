@@ -279,6 +279,204 @@ function InfoRow({
   );
 }
 
+// ─── Instance Settings ────────────────────────────────────────────────────────
+
+interface EvolutionSettings {
+  rejectCall: boolean;
+  msgCall: string;
+  groupsIgnore: boolean;
+  alwaysOnline: boolean;
+  readMessages: boolean;
+  readStatus: boolean;
+  syncFullHistory: boolean;
+}
+
+function SettingToggle({
+  label,
+  description,
+  checked,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3 py-3 border-b border-[var(--border)]/60 last:border-0">
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-medium text-[var(--fg)]">{label}</p>
+        <p className="text-[11px] text-[var(--fg-tertiary)] mt-0.5 leading-snug">{description}</p>
+      </div>
+      <button
+        onClick={() => !disabled && onChange(!checked)}
+        disabled={disabled}
+        className={cn(
+          'relative w-10 h-6 rounded-full transition-colors flex-shrink-0 mt-0.5',
+          checked ? 'bg-[var(--accent)]' : 'bg-[var(--border)]',
+          disabled && 'opacity-40 cursor-not-allowed',
+        )}
+      >
+        <span className={cn(
+          'absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform',
+          checked ? 'translate-x-5' : 'translate-x-1',
+        )} />
+      </button>
+    </div>
+  );
+}
+
+function InstanceSettings({ instanceId, instanceName }: { instanceId: string; instanceName: string }) {
+  const [settings, setSettings] = useState<EvolutionSettings>({
+    rejectCall: false,
+    msgCall: '',
+    groupsIgnore: false,
+    alwaysOnline: false,
+    readMessages: false,
+    readStatus: false,
+    syncFullHistory: false,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    instancesApi.getSettings(instanceId)
+      .then(({ data }) => {
+        const res = data as ApiResponse<EvolutionSettings>;
+        const s = res.data;
+        setSettings({
+          rejectCall: s.rejectCall ?? false,
+          msgCall: s.msgCall ?? '',
+          groupsIgnore: s.groupsIgnore ?? false,
+          alwaysOnline: s.alwaysOnline ?? false,
+          readMessages: s.readMessages ?? false,
+          readStatus: s.readStatus ?? false,
+          syncFullHistory: s.syncFullHistory ?? false,
+        });
+      })
+      .catch(() => setError('No se pudo cargar la configuración'))
+      .finally(() => setLoading(false));
+  }, [instanceId]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError('');
+    try {
+      await instancesApi.setSettings(instanceId, settings as unknown as Record<string, unknown>);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (e: any) {
+      setError(e.response?.data?.error?.message ?? 'Error al guardar');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const set = (key: keyof EvolutionSettings) => (value: boolean | string) =>
+    setSettings(s => ({ ...s, [key]: value }));
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <Spinner />
+    </div>
+  );
+
+  return (
+    <div className="space-y-5">
+      {/* Behavior */}
+      <div>
+        <p className="text-[11px] font-semibold text-[var(--fg-tertiary)] uppercase tracking-wider mb-2">Comportamiento</p>
+        <div className="bg-[var(--bg)] rounded-[10px] border border-[var(--border)] px-4">
+          <SettingToggle
+            label="Rechazar llamadas"
+            description="Rechaza automáticamente las llamadas entrantes de WhatsApp"
+            checked={settings.rejectCall}
+            onChange={set('rejectCall') as (v: boolean) => void}
+          />
+          {settings.rejectCall && (
+            <div className="pb-3">
+              <input
+                value={settings.msgCall}
+                onChange={e => set('msgCall')(e.target.value)}
+                placeholder="Mensaje al rechazar llamada (opcional)"
+                className="w-full h-9 px-3 rounded-[8px] text-[13px] bg-[var(--bg-elevated)] border border-[var(--border)] text-[var(--fg)] placeholder:text-[var(--fg-tertiary)] outline-none focus:border-[var(--accent)]/60 transition-colors"
+              />
+            </div>
+          )}
+          <SettingToggle
+            label="Ignorar grupos"
+            description="No procesa mensajes de grupos de WhatsApp"
+            checked={settings.groupsIgnore}
+            onChange={set('groupsIgnore') as (v: boolean) => void}
+          />
+          <SettingToggle
+            label="Siempre en línea"
+            description="Mantiene el estado de presencia como 'En línea' constantemente"
+            checked={settings.alwaysOnline}
+            onChange={set('alwaysOnline') as (v: boolean) => void}
+          />
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div>
+        <p className="text-[11px] font-semibold text-[var(--fg-tertiary)] uppercase tracking-wider mb-2">Mensajes</p>
+        <div className="bg-[var(--bg)] rounded-[10px] border border-[var(--border)] px-4">
+          <SettingToggle
+            label="Marcar como leído automáticamente"
+            description="Los mensajes entrantes se marcan como leídos al recibirlos (doble check azul)"
+            checked={settings.readMessages}
+            onChange={set('readMessages') as (v: boolean) => void}
+          />
+          <SettingToggle
+            label="Confirmar lectura de estados"
+            description="Envía confirmación de lectura para los estados/stories de tus contactos"
+            checked={settings.readStatus}
+            onChange={set('readStatus') as (v: boolean) => void}
+          />
+        </div>
+      </div>
+
+      {/* Sync */}
+      <div>
+        <p className="text-[11px] font-semibold text-[var(--fg-tertiary)] uppercase tracking-wider mb-2">Sincronización</p>
+        <div className="bg-[var(--bg)] rounded-[10px] border border-[var(--border)] px-4">
+          <SettingToggle
+            label="Historial completo al conectar"
+            description="Sincroniza todo el historial de mensajes al conectar (puede ser lento)"
+            checked={settings.syncFullHistory}
+            onChange={set('syncFullHistory') as (v: boolean) => void}
+          />
+        </div>
+      </div>
+
+      {error && (
+        <p className="text-[12px] text-[var(--destructive)] bg-[var(--destructive)]/8 rounded-[8px] px-3 py-2">{error}</p>
+      )}
+
+      <button
+        onClick={handleSave}
+        disabled={saving}
+        className={cn(
+          'w-full h-9 rounded-[8px] text-[13px] font-medium flex items-center justify-center gap-2 transition-colors',
+          saved
+            ? 'bg-[var(--success)]/10 text-[var(--success)] border border-[var(--success)]/30'
+            : 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]',
+          saving && 'opacity-60 cursor-wait',
+        )}
+      >
+        {saving ? <Spinner className="w-3.5 h-3.5" /> :
+         saved   ? <><Check size={13} /> Guardado</> :
+                   'Guardar configuración'}
+      </button>
+    </div>
+  );
+}
+
 // ─── Instance Detail Drawer ───────────────────────────────────────────────────
 
 function InstanceDetailDrawer({
@@ -296,7 +494,7 @@ function InstanceDetailDrawer({
   const [webhookUrl, setWebhookUrl] = useState('');
   const [webhookLoading, setWebhookLoading] = useState(false);
   const [webhookSaved, setWebhookSaved] = useState(false);
-  const [activeTab, setActiveTab] = useState<'info' | 'config'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'config' | 'settings'>('info');
 
   // Load current webhook
   useEffect(() => {
@@ -416,6 +614,7 @@ function InstanceDetailDrawer({
           {([
             { key: 'info', label: 'Información' },
             { key: 'config', label: 'Configuración' },
+            { key: 'settings', label: 'Ajustes' },
           ] as const).map(tab => (
             <button
               key={tab.key}
@@ -502,7 +701,7 @@ function InstanceDetailDrawer({
                 value={instance.lastSeen ? formatRelativeTime(instance.lastSeen) : 'Sin actividad'}
               />
             </div>
-          ) : (
+          ) : activeTab === 'config' ? (
             <div className="space-y-5">
               {/* Webhook */}
               <div className="space-y-3">
@@ -580,7 +779,9 @@ function InstanceDetailDrawer({
                 </p>
               </div>
             </div>
-          )}
+          ) : activeTab === 'settings' ? (
+            <InstanceSettings instanceId={instance.id} instanceName={instance.name} />
+          ) : null}
         </div>
       </motion.div>
     </>

@@ -25,7 +25,8 @@ export interface Contact {
 export interface Message {
   id: string; instanceId: string; contactId: string; remoteJid: string;
   messageId: string; fromMe: boolean; type: string; content: string | null;
-  mediaUrl: string | null; caption: string | null; status: string; timestamp: string; createdAt: string;
+  mediaUrl: string | null; caption: string | null; senderName: string | null;
+  status: string; timestamp: string; createdAt: string;
 }
 
 export interface Campaign {
@@ -51,6 +52,18 @@ export interface OverviewStats {
 export interface HealthStatus {
   database: { status: 'ok' | 'error'; latencyMs: number | null; error?: string };
   evolutionApi: { status: 'ok' | 'error'; latencyMs: number | null; error?: string };
+  overall: 'healthy' | 'degraded' | 'unhealthy';
+}
+
+export interface ServiceHealth {
+  name: string;
+  status: 'ok' | 'error';
+  latencyMs: number;
+  error?: string;
+}
+
+export interface InfraHealthStatus {
+  services: ServiceHealth[];
   overall: 'healthy' | 'degraded' | 'unhealthy';
 }
 

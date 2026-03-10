@@ -16,6 +16,11 @@ router.use(authenticate, authorize('ADMIN'));
  */
 
 // ============================================================
+// GET /api/v1/infra/health
+// ============================================================
+router.get('/health', infraController.getHealth.bind(infraController));
+
+// ============================================================
 // GET /api/v1/infra/metrics
 // ============================================================
 /**
@@ -243,6 +248,18 @@ router.post('/containers/:id/stop', infraController.stopContainer.bind(infraCont
  *         description: Contenedor no encontrado
  */
 router.post('/containers/:id/start', infraController.startContainer.bind(infraController));
+
+// POST /api/v1/infra/containers/prune
+router.post('/containers/prune', infraController.pruneContainers.bind(infraController));
+
+// GET /api/v1/infra/containers/:id/detail
+router.get('/containers/:id/detail', infraController.getContainerDetail.bind(infraController));
+
+// GET /api/v1/infra/processes
+router.get('/processes', infraController.getProcesses.bind(infraController));
+
+// GET /api/v1/infra/network
+router.get('/network', infraController.getNetworkStats.bind(infraController));
 
 // ============================================================
 // GET /api/v1/infra/containers/:id/logs  — SSE

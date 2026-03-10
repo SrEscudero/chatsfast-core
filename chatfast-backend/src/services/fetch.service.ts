@@ -148,25 +148,34 @@ function getEvolutionClient(): AxiosInstance {
 function normalizeRecords<T>(raw: any): T[] {
   if (!raw) return [];
 
-  // Formato A: ya es un array
+  // Formato A: ya es un array plano
   if (Array.isArray(raw)) return raw as T[];
 
-  // Formato B: { messages: { records: [...] } } o { chats: { records: [...] } }
-  // Busca el primer valor que sea un objeto con .records
-  const keys = Object.keys(raw);
+  // Formato C: { records: [...] } directo en la raíz
+  if (Array.isArray(raw.records)) return raw.records as T[];
+
+  // Formato B/D: objeto con una clave cuyo valor puede ser:
+  //   B) { chats: { records: [...] } }  — paginado
+  //   D) { chats: [...] }               — array directo (más común en Evolution v2)
+  const keys = Object.keys(raw).filter(k => k !== 'cursor' && k !== 'total' && k !== 'pages' && k !== 'currentPage');
   for (const key of keys) {
     const val = raw[key];
-    if (val && typeof val === 'object' && Array.isArray(val.records)) {
+    if (!val) continue;
+    // Formato B: objeto con .records
+    if (typeof val === 'object' && !Array.isArray(val) && Array.isArray(val.records)) {
+      logger.debug(`[FetchService] normalizeRecords: formato B (${key}.records)`);
       return val.records as T[];
+    }
+    // Formato D: array directo
+    if (Array.isArray(val) && val.length >= 0) {
+      logger.debug(`[FetchService] normalizeRecords: formato D (${key} = array, len=${val.length})`);
+      return val as T[];
     }
   }
 
-  // Formato C: { records: [...] } directo
-  if (Array.isArray(raw.records)) return raw.records as T[];
-
-  // Fallback: el objeto tiene items de datos directamente
-  logger.warn('[FetchService] normalizeRecords: formato no reconocido, retornando array vacío', {
+  logger.warn('[FetchService] normalizeRecords: formato no reconocido', {
     keys: Object.keys(raw),
+    sample: JSON.stringify(raw).slice(0, 200),
   });
   return [];
 }
@@ -233,7 +242,14 @@ class FetchService {
       return res.data;
     }, 'fetchChats');
 
-    // Evolution puede devolver array plano o { chats: { records: [...] } }
+    // Log del formato real para diagnóstico
+    logger.debug('[FetchService] fetchChats raw response shape', {
+      isArray: Array.isArray(raw),
+      keys: raw && typeof raw === 'object' ? Object.keys(raw) : [],
+      sample: JSON.stringify(raw).slice(0, 300),
+    });
+
+    // Evolution puede devolver array plano o { chats: { records: [...] } } o { chats: [...] }
     const records: Chat[] = normalizeRecords(raw);
 
     logger.info('[FetchService] Chats fetched', {

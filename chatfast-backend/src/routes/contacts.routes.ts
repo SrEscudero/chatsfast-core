@@ -1,3 +1,6 @@
+import crypto from 'crypto';
+import { promisify } from 'util';
+import axios from 'axios';
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
@@ -35,17 +38,43 @@ function extractLastMsgText(lastMsg: any): string | null {
   return null;
 }
 
-// ─── Helper: extrae texto del tipo FetchedMessage (historial) ─────────────────
-function extractFetchedText(msg: any): string {
-  const text = extractLastMsgText(msg);
-  if (text) return text;
+// ─── Helper: extrae campos multimedia del tipo FetchedMessage (historial) ─────
+interface FetchedFields { content: string; mediaUrl: string | null; mediaKey: string | null; mimetype: string | null; caption: string | null; }
 
-  // Fallback: inspeccionar el tipo
-  const m = msg?.message;
-  if (!m) return '[sin contenido]';
-  const keys = Object.keys(m).filter(k => k !== 'messageContextInfo');
-  if (keys.length) return `[${keys[0]}]`;
-  return '[sin contenido]';
+function normalizeMediaKey(raw: unknown): string | null {
+  if (!raw) return null;
+  if (typeof raw === 'string') return raw;
+  if (typeof raw === 'object') {
+    const bytes = Object.values(raw as Record<string, number>);
+    return Buffer.from(bytes).toString('base64');
+  }
+  return null;
+}
+
+function extractFetchedFields(msg: any): FetchedFields {
+  const m = msg?.message ?? msg;
+  const none: FetchedFields = { content: '[sin contenido]', mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+
+  if (!m) return none;
+
+  if (m?.locationMessage) {
+    const lat = m.locationMessage.degreesLatitude;
+    const lng = m.locationMessage.degreesLongitude;
+    const label = m.locationMessage.name ?? m.locationMessage.address ?? null;
+    return { content: `📍 ${label ?? `${lat},${lng}`}`, mediaUrl: `https://www.google.com/maps?q=${lat},${lng}`, mediaKey: null, mimetype: null, caption: label };
+  }
+
+  if (m?.imageMessage)    return { content: '🖼️ Imagen',    mediaUrl: m.imageMessage.url    ?? null, mediaKey: normalizeMediaKey(m.imageMessage.mediaKey),    mimetype: m.imageMessage.mimetype    ?? 'image/jpeg', caption: m.imageMessage.caption    ?? null };
+  if (m?.videoMessage)    return { content: '🎥 Video',     mediaUrl: m.videoMessage.url    ?? null, mediaKey: normalizeMediaKey(m.videoMessage.mediaKey),    mimetype: m.videoMessage.mimetype    ?? 'video/mp4',  caption: m.videoMessage.caption    ?? null };
+  if (m?.audioMessage)    return { content: '🎵 Audio',     mediaUrl: m.audioMessage.url    ?? null, mediaKey: normalizeMediaKey(m.audioMessage.mediaKey),    mimetype: m.audioMessage.mimetype    ?? 'audio/ogg',  caption: null };
+  if (m?.documentMessage) return { content: '📄 Documento', mediaUrl: m.documentMessage.url ?? null, mediaKey: normalizeMediaKey(m.documentMessage.mediaKey), mimetype: m.documentMessage.mimetype ?? 'application/octet-stream', caption: m.documentMessage.fileName ?? null };
+  if (m?.stickerMessage)  return { content: '🎭 Sticker',   mediaUrl: m.stickerMessage.url  ?? null, mediaKey: normalizeMediaKey(m.stickerMessage.mediaKey),  mimetype: m.stickerMessage.mimetype  ?? 'image/webp', caption: null };
+
+  const text = extractLastMsgText(msg);
+  if (text) return { content: text, mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+
+  const keys = Object.keys(m).filter((k: string) => k !== 'messageContextInfo');
+  return { content: keys.length ? `[${keys[0]}]` : '[sin contenido]', mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
 }
 
 // ─── Helper: guarda en DB los mensajes traídos de Evolution API ───────────────
@@ -56,13 +85,17 @@ async function saveFetchedMessages(
   messages: any[],
 ): Promise<number> {
   let saved = 0;
+  const isGroup = remoteJid.includes('@g.us');
+
   for (const msg of messages) {
     const messageId = msg?.key?.id;
     if (!messageId) continue;
 
-    const fromMe    = msg?.key?.fromMe ?? false;
-    const content   = extractFetchedText(msg);
-    const msgType   = msg?.message
+    const fromMe     = msg?.key?.fromMe ?? false;
+    const pushName   = msg?.pushName ?? null;
+    const { content, mediaUrl, mediaKey, mimetype, caption } = extractFetchedFields(msg);
+    const senderName = (isGroup && !fromMe && pushName) ? pushName : null;
+    const msgType    = msg?.message
       ? (Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text')
       : 'text';
     const ts = msg?.messageTimestamp
@@ -79,8 +112,13 @@ async function saveFetchedMessages(
           remoteJid,
           messageId,
           fromMe,
+          senderName,
           type: msgType,
           content,
+          mediaUrl,
+          mediaKey,
+          mimetype,
+          caption,
           status: fromMe ? 'SENT' : 'DELIVERED',
           timestamp: ts,
         },
@@ -144,6 +182,21 @@ router.post('/sync', async (req: any, res, next) => {
       },
     });
 
+    // 1b. Limpiar participantes fantasma de grupos:
+    //     Contactos @s.whatsapp.net cuyos mensajes apuntan a un @g.us (remoteJid del mensaje ≠ del contacto)
+    //     Estos son artefactos del bug donde Evolution duplicaba el evento con el JID del participante.
+    const phantomCandidates = await prisma.contact.findMany({
+      where: { instanceId, remoteJid: { endsWith: '@s.whatsapp.net' }, isGroup: false },
+      select: { id: true, remoteJid: true, messages: { select: { remoteJid: true }, take: 1 } },
+    });
+    const phantomIds = phantomCandidates
+      .filter(c => c.messages.length > 0 && c.messages[0].remoteJid.includes('@g.us'))
+      .map(c => c.id);
+    if (phantomIds.length > 0) {
+      await prisma.contact.deleteMany({ where: { id: { in: phantomIds } } });
+      logger.info(`[Sync] Eliminados ${phantomIds.length} participantes fantasma de grupos`);
+    }
+
     // 2. Obtener chats, agenda de contactos y grupos de Evolution API
     let chats: any[]       = [];
     let addressBook: any[] = [];
@@ -185,13 +238,23 @@ router.post('/sync', async (req: any, res, next) => {
     }
 
     // 4. Construir mapa JID → subject desde la lista de grupos
-    //    fetchAllGroups devuelve el subject real de cada grupo
+    //    Fuente 1: fetchAllGroups (tiene el subject real)
     for (const g of groups) {
       const gJid     = (g as any).id ?? (g as any).jid ?? (g as any).remoteJid ?? '';
       const gSubject = (g as any).subject ?? (g as any).name ?? null;
       if (gJid && gSubject) {
         nameByJid.set(gJid, gSubject);
         nameByJid.set(gJid.replace(/@.*/, ''), gSubject);
+      }
+    }
+    // Fuente 2 (fallback): los propios chats también pueden traer el subject del grupo
+    for (const c of chats) {
+      const cJid = (c as any).remoteJid ?? (c as any).jid ?? c.id ?? '';
+      if (!cJid.includes('@g.us')) continue;
+      const subject = (c as any).subject ?? (c as any).name ?? null;
+      if (subject && !nameByJid.has(cJid)) {
+        nameByJid.set(cJid, subject);
+        nameByJid.set(cJid.replace(/@.*/, ''), subject);
       }
     }
 
@@ -237,9 +300,9 @@ router.post('/sync', async (req: any, res, next) => {
         await prisma.contact.update({
           where: { id: existing.id },
           data: {
-            // Solo actualizar nombre si lo encontramos y el campo está vacío
-            ...(name && !existing.name ? { name } : {}),
-            ...(name && existing.name !== name && name !== bare ? { name } : {}),
+            // Grupos: siempre actualizar el nombre (el subject puede cambiar)
+            // Contactos individuales: actualizar si tenemos nombre y es diferente
+            ...(name && name !== bare ? { name } : {}),
             unreadCount,
             ...(lastMessageAt ? { lastMessageAt } : {}),
             ...(lastMessageText ? { lastMessage: lastMessageText } : {}),
@@ -263,13 +326,100 @@ router.post('/sync', async (req: any, res, next) => {
       }
     }
 
-    logger.info(`[Sync] Instancia ${instanceId}: ${chats.length} chats, ${created} creados, ${updated} actualizados`);
+    // 4b. Importar agenda del teléfono — contactos con nombre guardado en el teléfono
+    //     pero que aún no tienen conversación. Esto permite buscarlos en el inbox.
+    let phonebookCreated = 0;
+    const chatJids = new Set(
+      chats.map((c: any) => (c as any).remoteJid ?? (c as any).jid ?? c.id ?? '').filter(Boolean),
+    );
+    for (const c of addressBook) {
+      const cJid  = (c as any).id ?? (c as any).jid ?? (c as any).remoteJid ?? '';
+      const cName = (c as any).name ?? (c as any).notify ?? (c as any).pushname ?? null;
+      if (!cJid || !cJid.includes('@') || !cName) continue;
+      if (cJid === 'status@broadcast' || cJid.endsWith('@lid') || cJid.endsWith('@g.us')) continue;
+      if (chatJids.has(cJid)) continue; // ya fue procesado como chat activo
+
+      const cPhone = cJid.replace(/@.*/, '');
+      const alreadyExists = await prisma.contact.findUnique({
+        where: { instanceId_remoteJid: { instanceId, remoteJid: cJid } },
+        select: { id: true },
+      });
+      if (!alreadyExists) {
+        await prisma.contact.create({
+          data: { instanceId, remoteJid: cJid, name: cName, phone: cPhone, isGroup: false },
+        });
+        phonebookCreated++;
+      }
+    }
+    if (phonebookCreated > 0) logger.info(`[Sync] ${phonebookCreated} contactos de agenda importados`);
+
+    // 5. Eliminar contactos sin mensajes que ya no están en Evolution
+    //    IMPORTANTE: solo se ejecuta si Evolution devolvió chats (para no borrar al parsear mal)
+    //    Solo elimina contactos sin historial — nunca toca contactos con mensajes reales.
+    let deleted = 0;
+    if (chats.length > 0) {
+      const validJids = new Set(
+        chats
+          .map((c: any) => (c as any).remoteJid ?? (c as any).jid ?? c.id ?? '')
+          .filter((j: string) => j.includes('@')),
+      );
+      // También agregar los JIDs de la agenda (no se borran contactos de phonebook)
+      for (const c of addressBook) {
+        const j = (c as any).id ?? (c as any).jid ?? (c as any).remoteJid ?? '';
+        if (j && j.includes('@')) validJids.add(j);
+      }
+
+      const result = await prisma.contact.deleteMany({
+        where: {
+          instanceId,
+          NOT: { remoteJid: { in: [...validJids] } },
+          messages: { none: {} },   // SOLO contactos sin mensajes — nunca borra historial
+          isGroup: false,           // nunca borrar grupos automáticamente
+        },
+      });
+      deleted = result.count;
+      if (deleted > 0) logger.info(`[Sync] Limpiados ${deleted} contactos sin historial huérfanos`);
+    } else {
+      logger.warn(`[Sync] fetchChats retornó 0 chats — se omite la limpieza para evitar pérdida de datos`);
+    }
+
+    logger.info(`[Sync] Instancia ${instanceId}: ${chats.length} chats, ${created} creados, ${updated} actualizados, ${phonebookCreated} agenda, ${deleted} eliminados`);
     ApiResponder.success(res, {
       synced: chats.length,
       created,
       updated,
-      message: `${chats.length} chats sincronizados (${created} nuevos, ${updated} actualizados)`,
+      phonebookCreated,
+      deleted,
+      message: `${chats.length} chats y ${phonebookCreated} contactos de agenda sincronizados`,
     });
+  } catch (e) { next(e); }
+});
+
+// ─── POST /api/v1/instances/:instanceId/contacts/start ───────────────────────
+// Crea o encuentra un contacto por número de teléfono para iniciar un chat.
+router.post('/start', async (req: any, res, next) => {
+  try {
+    const { instanceId } = req.params;
+    let { phone } = req.body;
+
+    // Normalizar: quitar espacios, guiones, paréntesis, signo +
+    phone = String(phone ?? '').replace(/[\s\-\(\)\+]/g, '');
+    if (!phone || !/^\d{7,15}$/.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PHONE', message: 'Número de teléfono inválido (solo dígitos, 7-15 caracteres)' },
+      });
+    }
+
+    const remoteJid = `${phone}@s.whatsapp.net`;
+
+    const contact = await prisma.contact.upsert({
+      where: { instanceId_remoteJid: { instanceId, remoteJid } },
+      update: {},
+      create: { instanceId, remoteJid, name: null, phone, isGroup: false },
+    });
+
+    ApiResponder.success(res, contact, 'Contacto listo para chatear');
   } catch (e) { next(e); }
 });
 
@@ -333,6 +483,89 @@ router.get('/:contactId/messages', async (req: any, res, next) => {
     // messages viene en orden desc; .reverse() da orden cronológico (más antiguo arriba)
     ApiResponder.success(res, { items: messages.reverse(), total });
   } catch (e) { next(e); }
+});
+
+// ─── GET /api/v1/instances/:instanceId/contacts/:contactId/messages/:messageId/media ──
+// Descarga el archivo del CDN de WhatsApp y lo desencripta usando el mediaKey
+// almacenado durante el webhook. Devuelve el archivo en claro al frontend.
+//
+// WhatsApp encripta los archivos en su CDN con AES-256-CBC.
+// El proceso de descifrado sigue el protocolo de Baileys / Signal Media Keys:
+//   1. HKDF(mediaKey, 112 bytes, info="WhatsApp {Type} Keys") → iv(16) + cipherKey(32) + macKey(32)
+//   2. Descargar archivo encriptado del CDN (últimos 10 bytes = MAC tag)
+//   3. AES-256-CBC decrypt(enc[:-10], cipherKey, iv)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const hkdfAsync = promisify(crypto.hkdf);
+
+const WA_MEDIA_INFO: Record<string, string> = {
+  imageMessage:    'WhatsApp Image Keys',
+  videoMessage:    'WhatsApp Video Keys',
+  audioMessage:    'WhatsApp Audio Keys',
+  documentMessage: 'WhatsApp Document Keys',
+  stickerMessage:  'WhatsApp Image Keys',
+};
+
+async function decryptWhatsAppMedia(encrypted: Buffer, mediaKeyB64: string, msgType: string): Promise<Buffer> {
+  const mediaKey = Buffer.from(mediaKeyB64, 'base64');
+  const info     = Buffer.from(WA_MEDIA_INFO[msgType] ?? 'WhatsApp Image Keys');
+  const salt     = Buffer.alloc(32, 0);
+
+  const expandedRaw = await hkdfAsync('sha256', mediaKey, salt, info, 112);
+  const expanded    = Buffer.from(expandedRaw);
+
+  const iv        = expanded.subarray(0, 16);
+  const cipherKey = expanded.subarray(16, 48);
+
+  // Quitar los 10 bytes finales (MAC tag) antes de descifrar
+  const enc      = encrypted.subarray(0, -10);
+  const decipher = crypto.createDecipheriv('aes-256-cbc', cipherKey, iv);
+  return Buffer.concat([decipher.update(enc), decipher.final()]);
+}
+
+router.get('/:contactId/messages/:messageId/media', async (req: any, res, next) => {
+  try {
+    const { instanceId, contactId, messageId: dbMsgId } = req.params;
+
+    // 1. Buscar mensaje en DB
+    const dbMsg = await prisma.message.findFirst({
+      where: { id: dbMsgId, instanceId, contactId },
+    });
+    if (!dbMsg || !dbMsg.mediaUrl || !dbMsg.mediaKey) {
+      return res.status(404).json({ success: false, error: { message: 'Media no disponible para este mensaje' } });
+    }
+
+    // 2. Descargar el archivo encriptado desde el CDN de WhatsApp
+    let encrypted: Buffer;
+    try {
+      const cdnRes = await axios.get(dbMsg.mediaUrl, {
+        responseType: 'arraybuffer',
+        timeout: 15_000,
+        headers: { 'User-Agent': 'WhatsApp/2.23.24.82 A' },
+      });
+      encrypted = Buffer.from(cdnRes.data as ArrayBuffer);
+    } catch (cdnErr: any) {
+      logger.warn(`[Media] CDN fetch failed: ${cdnErr.message}`);
+      return res.status(502).json({ success: false, error: { message: 'No se pudo descargar el archivo desde WhatsApp CDN' } });
+    }
+
+    // 3. Descifrar con el mediaKey guardado
+    let decrypted: Buffer;
+    try {
+      decrypted = await decryptWhatsAppMedia(encrypted, dbMsg.mediaKey, dbMsg.type);
+    } catch (decErr: any) {
+      logger.warn(`[Media] Decryption failed for msg ${dbMsg.messageId}: ${decErr.message}`);
+      return res.status(500).json({ success: false, error: { message: 'Error al descifrar el archivo' } });
+    }
+
+    const contentType = dbMsg.mimetype ?? 'application/octet-stream';
+    res.set('Content-Type', contentType);
+    res.set('Cache-Control', 'private, max-age=3600');
+    res.send(decrypted);
+  } catch (e: any) {
+    logger.warn(`[Media] Error inesperado: ${e.message}`);
+    next(e);
+  }
 });
 
 export default router;

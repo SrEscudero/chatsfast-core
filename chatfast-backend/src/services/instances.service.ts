@@ -490,6 +490,69 @@ class InstanceService {
   }
 
   // ----------------------------------------------------------
+  // getSettings / updateSettings
+  // Evolution API v2: GET /settings/find/{instanceName}
+  //                   POST /settings/set/{instanceName}
+  // ----------------------------------------------------------
+  async getSettings(id: string): Promise<object> {
+    const instance = await instanceRepository.findById(id);
+    if (!instance) {
+      const err = new Error(`Instancia con ID "${id}" no encontrada`);
+      (err as any).statusCode = 404;
+      throw err;
+    }
+
+    try {
+      const response = await evolutionApi.getInstance().get(`/settings/find/${instance.name}`);
+      return response.data;
+    } catch (error) {
+      logger.warn('Failed to fetch settings from Evolution API', {
+        instanceName: instance.name,
+        evolutionError: axios.isAxiosError(error) ? error.response?.data : error,
+      });
+      // Return safe defaults if Evolution doesn't respond
+      return {
+        rejectCall: false,
+        msgCall: '',
+        groupsIgnore: false,
+        alwaysOnline: false,
+        readMessages: false,
+        readStatus: false,
+        syncFullHistory: false,
+      };
+    }
+  }
+
+  async updateSettings(id: string, settings: {
+    rejectCall?: boolean;
+    msgCall?: string;
+    groupsIgnore?: boolean;
+    alwaysOnline?: boolean;
+    readMessages?: boolean;
+    readStatus?: boolean;
+    syncFullHistory?: boolean;
+  }): Promise<object> {
+    const instance = await instanceRepository.findById(id);
+    if (!instance) {
+      const err = new Error(`Instancia con ID "${id}" no encontrada`);
+      (err as any).statusCode = 404;
+      throw err;
+    }
+
+    try {
+      const response = await evolutionApi.getInstance().post(`/settings/set/${instance.name}`, settings);
+      logger.info('Instance settings updated', { instanceName: instance.name, settings });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const humanMessage = extractEvolutionError(error);
+        throw new Error(`No se pudo actualizar la configuración: ${humanMessage}`);
+      }
+      throw error;
+    }
+  }
+
+  // ----------------------------------------------------------
   // getMetrics (stub — implementar con datos reales de DB)
   // ----------------------------------------------------------
   async getMetrics(id: string, period: string = '24h'): Promise<object> {

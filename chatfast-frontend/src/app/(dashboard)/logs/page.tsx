@@ -6,7 +6,6 @@ import { Circle, Trash2, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { SSE_URLS } from '@/lib/api';
-import { useAuthStore } from '@/store/auth.store';
 
 interface LogEntry {
   id: number;
@@ -34,42 +33,91 @@ const LEVEL_BG: Record<string, string> = {
 let logCounter = 0;
 
 export default function LogsPage() {
-  const { accessToken } = useAuthStore();
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [connected, setConnected] = useState(false);
   const [autoScroll, setAutoScroll] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const containerRef = useRef<HTMLDivElement>(null);
-  const esRef = useRef<EventSource | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const connect = useCallback(() => {
-    if (esRef.current) esRef.current.close();
+    if (abortRef.current) abortRef.current.abort();
+    if (reconnectRef.current) clearTimeout(reconnectRef.current);
 
-    // Pass token via query param for SSE (EventSource can't set headers)
-    const url = `${SSE_URLS.liveLogs}?token=${accessToken ?? ''}`;
-    const es = new EventSource(url);
-    esRef.current = es;
+    const ac = new AbortController();
+    abortRef.current = ac;
 
-    es.addEventListener('connected', () => setConnected(true));
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
-    es.addEventListener('log', (e) => {
-      try {
-        const entry = JSON.parse(e.data);
-        setLogs((prev) => [
-          ...prev.slice(-499), // keep last 500 entries
-          { id: ++logCounter, level: entry.level ?? 'info', message: entry.message, timestamp: entry.timestamp },
-        ]);
-      } catch {}
+    fetch(SSE_URLS.liveLogs, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      signal: ac.signal,
+    }).then(async (res) => {
+      if (!res.ok) {
+        setConnected(false);
+        if (!ac.signal.aborted) reconnectRef.current = setTimeout(connect, 5000);
+        return;
+      }
+
+      const reader = res.body!.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done || ac.signal.aborted) break;
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() ?? '';
+
+        let eventName = '';
+        for (const line of lines) {
+          if (line.startsWith('event:')) {
+            eventName = line.slice(6).trim();
+            continue;
+          }
+          if (line.startsWith('data:')) {
+            try {
+              const data = JSON.parse(line.slice(5));
+              if (eventName === 'connected') {
+                setConnected(true);
+              } else if (eventName === 'log') {
+                setLogs(prev => [
+                  ...prev.slice(-499),
+                  {
+                    id: ++logCounter,
+                    level: data.level ?? 'info',
+                    message: data.message,
+                    timestamp: data.timestamp,
+                  },
+                ]);
+              }
+            } catch { /* ignore */ }
+            eventName = '';
+          }
+        }
+      }
+
+      // Stream ended — reconnect
+      if (!ac.signal.aborted) {
+        setConnected(false);
+        reconnectRef.current = setTimeout(connect, 3000);
+      }
+    }).catch(() => {
+      setConnected(false);
+      if (!ac.signal.aborted) {
+        reconnectRef.current = setTimeout(connect, 5000);
+      }
     });
-
-    es.onerror = () => setConnected(false);
-
-    return () => { es.close(); setConnected(false); };
-  }, [accessToken]);
+  }, []);
 
   useEffect(() => {
-    const cleanup = connect();
-    return cleanup;
+    connect();
+    return () => {
+      abortRef.current?.abort();
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
+    };
   }, [connect]);
 
   // Auto scroll
@@ -109,7 +157,7 @@ export default function LogsPage() {
             )}
           />
           <span className="text-[12px] text-[var(--fg-secondary)]">
-            {connected ? 'Conectado' : 'Desconectado'}
+            {connected ? 'Conectado' : 'Conectando...'}
           </span>
         </div>
 
@@ -147,7 +195,7 @@ export default function LogsPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex-1 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden"
+        className="flex-1 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden relative"
         style={{ minHeight: '65vh' }}
       >
         <div
@@ -158,7 +206,7 @@ export default function LogsPage() {
         >
           {visibleLogs.length === 0 ? (
             <p className="text-[var(--fg-tertiary)] text-center py-12">
-              {connected ? 'Esperando logs…' : 'Conectando al stream…'}
+              {connected ? 'Esperando logs...' : 'Conectando al stream...'}
             </p>
           ) : (
             visibleLogs.map((log) => (
@@ -185,7 +233,7 @@ export default function LogsPage() {
 
         {/* Auto-scroll indicator */}
         {!autoScroll && (
-          <div className="absolute bottom-20 right-8">
+          <div className="absolute bottom-4 right-4">
             <Button
               size="sm"
               variant="secondary"

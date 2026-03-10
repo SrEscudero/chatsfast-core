@@ -422,3 +422,1337 @@ Argument `unreadCount` must not be null.
 2026-03-10 09:33:10 [error]: [FetchService] Evolution error in "fetchGroups"
 2026-03-10 09:59:32 [error]: Evolution API Response Error Request failed with status code 404
 2026-03-10 09:59:32 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 10:51:26 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 10:51:26 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 10:55:38 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 10:55:38 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:01:49 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:01:49 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:01:52 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:01:52 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:02:35 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:02:35 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:03:12 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:03:12 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:22:47 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:22:47 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:27:45 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:27:45 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:40:13 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:40:13 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:40:48 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:44:28 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:44:28 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:54:52 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:54:52 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 11:54:52 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:54:52 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 11:57:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:57:15 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:57:25 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:57:25 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 11:57:25 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:57:25 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 11:57:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:57:34 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:57:42 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:59:56 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:59:56 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 11:59:59 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 11:59:59 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 12:00:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 12:00:22 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 12:00:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 12:00:22 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\routes\contacts.routes.ts:420:22)
+2026-03-10 12:00:46 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 12:00:46 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 12:25:20 [error]: TypeError: Cannot read properties of undefined (reading 'length')
+    at CampaignService.create (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\campaign.service.ts:68:33)
+    at async CampaignController.create (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\controllers\campaign.controller.ts:36:24)
+2026-03-10 13:58:28 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0527C04681CFDAEC5E0"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "576ab0eb-aabc-4c0c-93b1-3d9092f8a576",
+          remoteJid: "120363041030499511@g.us",
+          messageId: "3EB0527C04681CFDAEC5E0",
+          fromMe: false,
+          senderName: "Pechincha Postagem",
+          type: "senderKeyDistributionMessage",
+          content: "*PRA FOCAR NOS TREINOSS 🔴 Creatina FTW 500G 😎 UM DOS MENORES PREÇOOO 😱*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 31,42* À vista\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/128555\n➡ *Use o cupom:* AUTOCUIDADO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T16:58:23.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:00:31 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0C5C3E2C249EDE43DA9"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "8cc2e3c2-0c5b-44b9-bab8-9c1178e337ff",
+          remoteJid: "120363352060958368@g.us",
+          messageId: "3EB0C5C3E2C249EDE43DA9",
+          fromMe: false,
+          senderName: "Thiago pechincheiro",
+          type: "senderKeyDistributionMessage",
+          content: "*PRECINHO TOP! MUITOOOO LINDOOO🔝 Galaxy A07 ⭐*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 506* Pix\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/132848\n➡ *Use o cupom:* MELIMAISPRAVC\n\n⚠️ 🚀 Oferta válida apenas para ASSINANTES MELI+\n\n📱 Grupo de promoções em Smartphones: https://pechinchou.net/smartphones",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:00:26.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:01:07 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0C79EB4FABE25BD30B2"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "3f8bcd34-8d4e-4997-a8e4-e8f9d03b05a6",
+          remoteJid: "120363168277906598@g.us",
+          messageId: "3EB0C79EB4FABE25BD30B2",
+          fromMe: false,
+          senderName: "Elielson Pechincheiro",
+          type: "senderKeyDistributionMessage",
+          content: "*PRECINHO TOP! MUITOOOO LINDOOO🔝 Galaxy A07 ⭐*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 506* Pix\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/132848\n➡ *Use o cupom:* MELIMAISPRAVC\n\n⚠️ 🚀 Oferta válida apenas para ASSINANTES MELI+\n\n📱 Grupo de promoções em Smartphones: https://pechinchou.net/smartphones",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:01:02.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:01:11 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0BE2419C3C801E0390C"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB0BE2419C3C801E0390C",
+          fromMe: false,
+          senderName: "106558558101664",
+          type: "senderKeyDistributionMessage",
+          content: "*PRECINHO TOP! MUITOOOO LINDOOO🔝 Galaxy A07 ⭐*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 506* Pix\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/132848\n➡ *Use o cupom:* MELIMAISPRAVC\n\n⚠️ 🚀 Oferta válida apenas para ASSINANTES MELI+\n\n📱 Grupo de promoções em Smartphones: https://pechinchou.net/smartphones",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:01:07.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:06:43 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB01135C94ABB6FB33D4B"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "3f8bcd34-8d4e-4997-a8e4-e8f9d03b05a6",
+          remoteJid: "120363168277906598@g.us",
+          messageId: "3EB01135C94ABB6FB33D4B",
+          fromMe: false,
+          senderName: "Elielson Pechincheiro",
+          type: "conversation",
+          content: "*BAIXOUUUUUUU!! P/ Quem Procura um Ar BARATINHO! 🥶❄ De Janela MIDEA, 7500 BTU/h*\n\n🔥 *R$ 1.223* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/113799\n➡ *Use o cupom:* VALETUDO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:06:38.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:06:59 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "AC15F389AD8979209125CD5A5AF54077"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "70525995-af72-4dfd-bf61-69e7e599c363",
+          remoteJid: "555499168720@s.whatsapp.net",
+          messageId: "AC15F389AD8979209125CD5A5AF54077",
+          fromMe: false,
+          senderName: null,
+          type: "conversation",
+          content: "Mañana llega un pedido",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:06:55.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:08:22 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A8A6C51E0642B36427"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "8cc2e3c2-0c5b-44b9-bab8-9c1178e337ff",
+          remoteJid: "120363352060958368@g.us",
+          messageId: "3EB0A8A6C51E0642B36427",
+          fromMe: false,
+          senderName: "Antônio Pechincheiro",
+          type: "senderKeyDistributionMessage",
+          content: "*UMA MÁQUINA!📱Moto G35 256GB de Armazenamento e até 12GB de RAM*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 837* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/110446\n➡ *Use o cupom:* VALETUDO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:08:17.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:10:15 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A34110B4DF7EB726F6"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB0A34110B4DF7EB726F6",
+          fromMe: false,
+          senderName: "Fabio",
+          type: "senderKeyDistributionMessage",
+          content: "*É A NOVA DA PULSE 😍 Pulsebox 2 Double 700W 🔊 TÁ NO PRECINHOO!!!*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 656* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/143703",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:10:10.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:10:29 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB03F0E9D00B1095C7D50"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "3f8bcd34-8d4e-4997-a8e4-e8f9d03b05a6",
+          remoteJid: "120363168277906598@g.us",
+          messageId: "3EB03F0E9D00B1095C7D50",
+          fromMe: false,
+          senderName: "Elielson Pechincheiro",
+          type: "conversation",
+          content: "*💧 POTÊNCIA E ECONOMIA! Electrolux 14,5kg com cesto inox resistente! 😍*\n\n🔥 *R$ 1.718* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/143701\n➡ *Use o cupom:* VALETUDO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:10:24.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:13:05 [error]: TypeError: Cannot read properties of undefined (reading 'length')
+    at CampaignService.create (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\campaign.service.ts:68:33)
+    at async CampaignController.create (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\controllers\campaign.controller.ts:36:24)
+2026-03-10 14:13:27 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0D4E014A4BFE6163BE0"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "3f8bcd34-8d4e-4997-a8e4-e8f9d03b05a6",
+          remoteJid: "120363168277906598@g.us",
+          messageId: "3EB0D4E014A4BFE6163BE0",
+          fromMe: false,
+          senderName: "Elielson Pechincheiro",
+          type: "senderKeyDistributionMessage",
+          content: "*UM LUXOOOO 😱 GUARDA ROUPA BEM DIVIDIDO 😍TA MUITO BARATOOO*\n\n🔥 *R$ 818* Parcelado\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/136698\n➡ *Use o cupom:* VALETUDO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:13:22.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:13:40 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 14:13:40 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 14:14:17 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "A5D459468EE3604CE73F7A10E98687A3"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "f1b34a5b-fbf3-4043-a86e-5b8dde079317",
+          remoteJid: "555491384508@s.whatsapp.net",
+          messageId: "A5D459468EE3604CE73F7A10E98687A3",
+          fromMe: true,
+          senderName: null,
+          type: "conversation",
+          content: "Opa",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "SENT",
+          timestamp: new Date("2026-03-10T17:14:13.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:14:20 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A4BC58F218B3C88317"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "289d72bf-2316-4e47-a187-93c72b7ece49",
+          remoteJid: "120363422650373486@g.us",
+          messageId: "3EB0A4BC58F218B3C88317",
+          fromMe: false,
+          senderName: "ly",
+          type: "senderKeyDistributionMessage",
+          content: "galera sabem dizer como faz pra editar mensagem via api? não estou achando na doc e gpt só fala errado e n funciona",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:14:15.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:14:27 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "ACC9FEE17E4182E0D0533955D07DF121"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "f1b34a5b-fbf3-4043-a86e-5b8dde079317",
+          remoteJid: "555491384508@s.whatsapp.net",
+          messageId: "ACC9FEE17E4182E0D0533955D07DF121",
+          fromMe: false,
+          senderName: null,
+          type: "conversation",
+          content: "Opa",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:14:23.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:14:30 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "AC5A7A4192818121CCB6754A53945D56"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "f1b34a5b-fbf3-4043-a86e-5b8dde079317",
+          remoteJid: "555491384508@s.whatsapp.net",
+          messageId: "AC5A7A4192818121CCB6754A53945D56",
+          fromMe: false,
+          senderName: null,
+          type: "conversation",
+          content: "Tudo bem ?",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:14:26.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:14:51 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0CD4099853F2B332BAD"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "6430a004-be57-4691-ba36-e7f24da84cee",
+          remoteJid: "120363044559363349@g.us",
+          messageId: "3EB0CD4099853F2B332BAD",
+          fromMe: false,
+          senderName: "Pechinchou Postagens",
+          type: "conversation",
+          content: "*PARCELADOOO!! 🔝 Ar Condicionado INVERTER 12.000Btus 🥶 TOP DEMAIS ⭐😍*\n\n🔥 *R$ 1.599* Parcelado\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/127589\n➡ *Use o cupom:* MELIMAISPRAVC\n\n*⚠️ 🚀 Oferta válida apenas para ASSINANTES MELI+*\n\n🏡 Grupo de promoções em Casa & Eletro: https://pechinchou.net/casaeletro",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:14:47.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:15:26 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A34110B4DF7EB726F6"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB0A34110B4DF7EB726F6",
+          fromMe: false,
+          senderName: "Fabio",
+          type: "senderKeyDistributionMessage",
+          content: "*É A NOVA DA PULSE 😍 Pulsebox 2 Double 700W 🔊 TÁ NO PRECINHOO!!!*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 656* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/143703",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:15:21.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:15:29 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A34110B4DF7EB726F6"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB0A34110B4DF7EB726F6",
+          fromMe: false,
+          senderName: "Fabio",
+          type: "senderKeyDistributionMessage",
+          content: "*É A NOVA DA PULSE 😍 Pulsebox 2 Double 700W 🔊 TÁ NO PRECINHOO!!!*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 656* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/143703",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:15:24.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:15:31 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A34110B4DF7EB726F6"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB0A34110B4DF7EB726F6",
+          fromMe: false,
+          senderName: "Fabio",
+          type: "senderKeyDistributionMessage",
+          content: "*É A NOVA DA PULSE 😍 Pulsebox 2 Double 700W 🔊 TÁ NO PRECINHOO!!!*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 656* Pix\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/143703",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:15:26.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:15:38 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0E6A5AE2D25BC0FDEA0"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "6430a004-be57-4691-ba36-e7f24da84cee",
+          remoteJid: "120363044559363349@g.us",
+          messageId: "3EB0E6A5AE2D25BC0FDEA0",
+          fromMe: false,
+          senderName: "Pechinchou Postagens",
+          type: "senderKeyDistributionMessage",
+          content: "*KIT COM 4 POTES ENORMES 🍯 São de Vidrooooo*\n\n📦 Frete Grátis Amazon Prime\n🔥 *R$ 43,72* À vista\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/114731\n➡ *Use o cupom:* LAR15",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:15:34.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:15:59 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB04E3A1ED31076D263A0"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "be8e4fd5-46d9-49dc-9f2d-d9207ce7499c",
+          remoteJid: "120363372671730051@g.us",
+          messageId: "3EB04E3A1ED31076D263A0",
+          fromMe: false,
+          senderName: "Fabio",
+          type: "conversation",
+          content: "*IMPRESSORA HP LASER 🖨 TOP pra quem Imprime Muito 🤍🔝*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 819* Parcelado\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/57859\n➡ *Use o cupom:* VALETUDO",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:15:55.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:16:43 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0B330756ED49E2E69D8"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "6430a004-be57-4691-ba36-e7f24da84cee",
+          remoteJid: "120363044559363349@g.us",
+          messageId: "3EB0B330756ED49E2E69D8",
+          fromMe: false,
+          senderName: "Pechinchou Postagens",
+          type: "conversation",
+          content: "*CORREEEEEE 🏃🏻 CUPOM ACABA RÁPIDOOOOO ⚠*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 18,00* À vista\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/115404\n\n*⚠️ Resgatando Cupom R$ 41,00 OFF em Darklab abaixo do preço do produto no Mercado Livre.*",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:16:38.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:17:07 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB08667EA79E53A315A68"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "576ab0eb-aabc-4c0c-93b1-3d9092f8a576",
+          remoteJid: "120363041030499511@g.us",
+          messageId: "3EB08667EA79E53A315A68",
+          fromMe: false,
+          senderName: "259949355642911",
+          type: "conversation",
+          content: "*PARCELADOOO!! 🔝 Ar Condicionado INVERTER 12.000Btus 🥶 TOP DEMAIS ⭐😍*\n\n🔥 *R$ 1.599* Parcelado\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/127589\n➡ *Use o cupom:* MELIMAISPRAVC\n\n*⚠️ 🚀 Oferta válida apenas para ASSINANTES MELI+*\n\n🏡 Grupo de promoções em Casa & Eletro: https://pechinchou.net/casaeletro",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:17:02.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:17:43 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB0A3E139AE2F48D9FA27"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "289d72bf-2316-4e47-a187-93c72b7ece49",
+          remoteJid: "120363422650373486@g.us",
+          messageId: "3EB0A3E139AE2F48D9FA27",
+          fromMe: false,
+          senderName: "Pietro",
+          type: "senderKeyDistributionMessage",
+          content: "Tenta o claude",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:17:38.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:17:55 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB024EB3F9737E87CE4A3"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "576ab0eb-aabc-4c0c-93b1-3d9092f8a576",
+          remoteJid: "120363041030499511@g.us",
+          messageId: "3EB024EB3F9737E87CE4A3",
+          fromMe: false,
+          senderName: "259949355642911",
+          type: "senderKeyDistributionMessage",
+          content: "*KIT COM 4 POTES ENORMES 🍯 São de Vidrooooo*\n\n📦 Frete Grátis Amazon Prime\n🔥 *R$ 43,72* À vista\n\n*Achado Amazon 👇🏻*\n🛒 https://pechinchou.com.br/oferta/114731\n➡ *Use o cupom:* LAR15",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:17:50.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:18:57 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "3EB020DF5C8E2F389C2BEF"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "576ab0eb-aabc-4c0c-93b1-3d9092f8a576",
+          remoteJid: "120363041030499511@g.us",
+          messageId: "3EB020DF5C8E2F389C2BEF",
+          fromMe: false,
+          senderName: "100400259949355642911",
+          type: "conversation",
+          content: "*CORREEEEEE 🏃🏻 CUPOM ACABA RÁPIDOOOOO ⚠*\n\n📦 Frete Grátis todo o Brasil\n🔥 *R$ 18,00* À vista\n\n*Achado Mercado Livre 👇🏻*\n🛒 https://pechinchou.com.br/oferta/115404\n\n*⚠️ Resgatando Cupom R$ 41,00 OFF em Darklab abaixo do preço do produto no Mercado Livre.*",
+          mediaUrl: null,
+          mediaKey: null,
+          ~~~~~~~~
+          mimetype: null,
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:18:52.000Z"),
+      ?   id?: String,
+      ?   createdAt?: DateTime
+        }
+      })
+
+Unknown argument `mediaKey`. Did you mean `mediaUrl`? Available options are marked with ?.
+2026-03-10 14:26:02 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "AC2779DB3048A9CB5F2C7E6779830427"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "f1b34a5b-fbf3-4043-a86e-5b8dde079317",
+          remoteJid: "555491384508@s.whatsapp.net",
+          messageId: "AC2779DB3048A9CB5F2C7E6779830427",
+          fromMe: false,
+          senderName: null,
+          type: "imageMessage",
+          content: "🖼️ Imagen",
+          mediaUrl: "https://mmg.whatsapp.net/v/t62.7118-24/580847770_1738645013763076_5727277195394222129_n.enc?ccb=11-4&oh=01_Q5Aa4AFPg1KzZP0dZwo1HAF-mBi9pp91fttXjVImNpxusMGKvw&oe=69D7D12E&_nc_sid=5e03e0&mms3=true",
+          mediaKey: {
+            0: 118,
+            1: 112,
+            2: 71,
+            3: 205,
+            4: 244,
+            5: 127,
+            6: 161,
+            7: 154,
+            8: 217,
+            9: 173,
+            10: 168,
+            11: 16,
+            12: 73,
+            13: 91,
+            14: 145,
+            15: 89,
+            16: 50,
+            17: 89,
+            18: 192,
+            19: 206,
+            20: 163,
+            21: 122,
+            22: 208,
+            23: 117,
+            24: 236,
+            25: 237,
+            26: 192,
+            27: 43,
+            28: 88,
+            29: 201,
+            30: 72,
+            31: 157
+          },
+          ~~~~~~~~~
+          mimetype: "image/jpeg",
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:25:58.000Z")
+        }
+      })
+
+Argument `mediaKey`: Invalid value provided. Expected String or Null, provided Object.
+2026-03-10 14:26:09 [error]: ❌ Error guardando mensaje en DB: 
+Invalid `prisma.message.upsert()` invocation in
+C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\webhook.service.ts:268:28
+
+  265   ? Object.keys(msg.message).find(k => k !== 'messageContextInfo') ?? 'text'
+  266   : 'text';
+  267 
+→ 268 await prisma.message.upsert({
+        where: {
+          instanceId_messageId: {
+            instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+            messageId: "ACFB55B89F77D258DB48ADF89F4114C0"
+          }
+        },
+        update: {},
+        create: {
+          instanceId: "8faae5ad-a67e-49de-962d-dcec68ff801f",
+          contactId: "f1b34a5b-fbf3-4043-a86e-5b8dde079317",
+          remoteJid: "555491384508@s.whatsapp.net",
+          messageId: "ACFB55B89F77D258DB48ADF89F4114C0",
+          fromMe: false,
+          senderName: null,
+          type: "imageMessage",
+          content: "🖼️ Imagen",
+          mediaUrl: "https://mmg.whatsapp.net/v/t62.7118-24/552873114_782786207779651_4321841223814135204_n.enc?ccb=11-4&oh=01_Q5Aa4AFFiZSjpV_kyHIzvAEZtV1HCr0Bi-FbllcVmibazvLDQg&oe=69D7B2A6&_nc_sid=5e03e0&mms3=true",
+          mediaKey: {
+            0: 90,
+            1: 159,
+            2: 47,
+            3: 221,
+            4: 23,
+            5: 131,
+            6: 161,
+            7: 254,
+            8: 39,
+            9: 117,
+            10: 142,
+            11: 67,
+            12: 41,
+            13: 95,
+            14: 182,
+            15: 169,
+            16: 3,
+            17: 206,
+            18: 52,
+            19: 124,
+            20: 243,
+            21: 172,
+            22: 165,
+            23: 95,
+            24: 110,
+            25: 135,
+            26: 240,
+            27: 202,
+            28: 95,
+            29: 67,
+            30: 156,
+            31: 233
+          },
+          ~~~~~~~~~
+          mimetype: "image/jpeg",
+          caption: null,
+          status: "DELIVERED",
+          timestamp: new Date("2026-03-10T17:26:05.000Z")
+        }
+      })
+
+Argument `mediaKey`: Invalid value provided. Expected String or Null, provided Object.
+2026-03-10 15:00:29 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:02:04 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:04:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:04:35 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:04:35 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:05:03 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:05:31 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:05:42 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:06:58 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:06:58 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:07:00 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:07:00 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:07:11 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:07:11 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:07:28 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:07:28 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:08:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:08:15 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:08:18 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:08:39 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:09:56 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:00 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:00 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:10:08 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:08 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:10:08 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:37 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:37 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:10:38 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:10:38 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:12:02 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:12:17 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:13:08 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:14:26 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:15:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:15:10 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:15:19 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:21:07 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:21:13 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:21:13 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:21:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:23:44 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:24:20 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:24:20 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:24:57 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:24:57 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:25:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:25:22 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:25:45 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:27:10 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:27:27 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:28:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:28:15 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:29:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:29:05 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:29:17 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:29:17 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 15:29:18 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:29:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:29:49 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:31:58 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:33:11 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:33:38 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:35:47 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:37:33 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:37:39 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:39:10 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:40:00 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:41:56 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:45:54 [error]: Docker listContainers failed
+2026-03-10 15:45:54 [error]: TypeError: import_AppError.AppError.internal is not a function
+    at InfraService.getContainers (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\services\infra.service.ts:175:22)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async InfraController.getContainers (C:\Users\Kelvis\Documents\chatsfast-core\chatfast-backend\src\controllers\infra.controller.ts:26:26)
+2026-03-10 15:47:43 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:47:43 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:50:15 [error]: Evolution API Response Error timeout of 30000ms exceeded
+2026-03-10 15:53:22 [error]: ❌ Database connection failed
+2026-03-10 15:53:56 [error]: ❌ Database connection failed
+2026-03-10 15:54:52 [error]: ❌ Database connection failed
+2026-03-10 15:59:14 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:14 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:16 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:16 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:17 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:19 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:23 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:24 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 15:59:25 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:01:03 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:02:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:02:41 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:03:36 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:04:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:05:18 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:05:45 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:06:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:06:38 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:08:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:08:46 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:08:56 [error]: Evolution API Response Error timeout of 5000ms exceeded
+2026-03-10 16:09:43 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:09:59 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:10:10 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:11:19 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:12:57 [error]: Evolution API Response Error timeout of 5000ms exceeded
+2026-03-10 16:14:55 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:15:12 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:15:58 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:16:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:16:07 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:16:26 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:16:59 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:17:05 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:17:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:17:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:17:43 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:17:59 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:18:27 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:18:39 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:18:48 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:19:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:19:55 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:14 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:27 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:31 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:31 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:33 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:33 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:20:54 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:21:28 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:21:28 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 16:21:33 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:21:42 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:21:46 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:21:46 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:23:18 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:23:28 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:23:41 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:24:22 [error]: Evolution API Response Error timeout of 3000ms exceeded
+2026-03-10 16:24:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:25:12 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:25:24 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:28:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:28:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:28:26 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:28:29 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:28:56 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:29:35 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:29:40 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:30:04 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:30:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:30:17 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:30:22 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:30:48 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:31:11 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:31:45 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:31:54 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:32:15 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:32:44 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:33:16 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:33:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:34:12 [error]: Evolution API Response Error timeout of 3000ms exceeded
+2026-03-10 16:34:35 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:34:48 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:35:00 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 16:35:01 [error]: Evolution API Response Error Request failed with status code 404

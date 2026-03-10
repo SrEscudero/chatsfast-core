@@ -25,7 +25,11 @@
       "Bash(python:*)",
       "Bash(npm install:*)",
       "Bash(npm test:*)",
-      "Bash(npx jest:*)"
+      "Bash(npx jest:*)",
+      "Bash(npx prisma:*)",
+      "Bash(node:*)",
+      "Bash(cd chatfast-frontend:*)",
+      "Bash(grep -r \"NEXT_PUBLIC_API_URL\" \"C:\\\\Users\\\\Kelvis\\\\Documents\\\\chatsfast-core\\\\chatfast-frontend\" --include=\"*.env*\" --include=\"*.local\" 2>/dev/null; ls \"C:\\\\Users\\\\Kelvis\\\\Documents\\\\chatsfast-core\\\\chatfast-frontend\"/.env* 2>/dev/null)"
     ]
   }
 }

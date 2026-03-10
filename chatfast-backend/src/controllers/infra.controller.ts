@@ -6,6 +6,18 @@ import { logger } from '../config/logger';
 class InfraController {
 
   // ----------------------------------------------------------
+  // GET /api/v1/infra/health
+  // ----------------------------------------------------------
+  async getHealth(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const health = await infraService.getHealthStatus();
+      ApiResponder.success(res, health, 'Estado de servicios obtenido');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // ----------------------------------------------------------
   // GET /api/v1/infra/metrics
   // ----------------------------------------------------------
   async getMetrics(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -76,6 +88,46 @@ class InfraController {
     } catch (error) {
       next(error);
     }
+  }
+
+  // ----------------------------------------------------------
+  // POST /api/v1/infra/containers/prune
+  // ----------------------------------------------------------
+  async pruneContainers(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await infraService.pruneContainers();
+      ApiResponder.success(res, result, `${result.removed.length} contenedores eliminados, ${result.spaceReclaimedMb} MB liberados`);
+    } catch (error) { next(error); }
+  }
+
+  // ----------------------------------------------------------
+  // GET /api/v1/infra/containers/:id/detail
+  // ----------------------------------------------------------
+  async getContainerDetail(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const detail = await infraService.getContainerDetail(req.params.id);
+      ApiResponder.success(res, detail);
+    } catch (error) { next(error); }
+  }
+
+  // ----------------------------------------------------------
+  // GET /api/v1/infra/processes
+  // ----------------------------------------------------------
+  async getProcesses(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const processes = await infraService.getTopProcesses();
+      ApiResponder.success(res, { processes });
+    } catch (error) { next(error); }
+  }
+
+  // ----------------------------------------------------------
+  // GET /api/v1/infra/network
+  // ----------------------------------------------------------
+  async getNetworkStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const interfaces = await infraService.getNetworkStats();
+      ApiResponder.success(res, { interfaces });
+    } catch (error) { next(error); }
   }
 
   // ----------------------------------------------------------

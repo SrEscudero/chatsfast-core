@@ -2,6 +2,8 @@ import * as si from 'systeminformation';
 import Dockerode from 'dockerode';
 import { logger } from '../config/logger';
 import { AppError } from '../errors/AppError';
+import { prisma } from '../config/database';
+import { evolutionApi } from '../config/evolution';
 
 // ============================================================
 // DOCKER CLIENT
@@ -93,19 +95,80 @@ function formatUptime(seconds: number): string {
 // SERVICE
 // ============================================================
 
+// Cache static system info (CPU brand, OS, etc.) — these don't change
+let cachedStaticInfo: { cpu: Awaited<ReturnType<typeof si.cpu>>; os: Awaited<ReturnType<typeof si.osInfo>> } | null = null;
+
 class InfraService {
+
+  // ----------------------------------------------------------
+  // getHealthStatus — ping DB, Evolution API, Docker
+  // ----------------------------------------------------------
+  async getHealthStatus(): Promise<{
+    services: Array<{ name: string; status: 'ok' | 'error'; latencyMs: number; error?: string }>;
+    overall: 'healthy' | 'degraded' | 'unhealthy';
+  }> {
+    const withTimeout = <T,>(promise: Promise<T>, ms: number): Promise<T> =>
+      Promise.race([
+        promise,
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms)),
+      ]);
+
+    const checks = await Promise.all([
+      // Database
+      (async () => {
+        const start = Date.now();
+        try {
+          await withTimeout(prisma.$queryRaw`SELECT 1`, 3000);
+          return { name: 'PostgreSQL', status: 'ok' as const, latencyMs: Date.now() - start };
+        } catch (err: any) {
+          return { name: 'PostgreSQL', status: 'error' as const, latencyMs: Date.now() - start, error: err.message };
+        }
+      })(),
+      // Evolution API
+      (async () => {
+        const start = Date.now();
+        try {
+          await withTimeout(evolutionApi.getInstance().get('/', { timeout: 3000 }), 3000);
+          return { name: 'Evolution API', status: 'ok' as const, latencyMs: Date.now() - start };
+        } catch (err: any) {
+          return { name: 'Evolution API', status: 'error' as const, latencyMs: Date.now() - start, error: err.message };
+        }
+      })(),
+      // Docker
+      (async () => {
+        const start = Date.now();
+        try {
+          await withTimeout(getDocker().ping(), 3000);
+          return { name: 'Docker', status: 'ok' as const, latencyMs: Date.now() - start };
+        } catch (err: any) {
+          return { name: 'Docker', status: 'error' as const, latencyMs: Date.now() - start, error: err.message };
+        }
+      })(),
+    ]);
+
+    const failCount = checks.filter(c => c.status === 'error').length;
+    const overall = failCount === 0 ? 'healthy' : failCount < checks.length ? 'degraded' : 'unhealthy';
+
+    return { services: checks, overall };
+  }
 
   // ----------------------------------------------------------
   // getSystemMetrics — CPU, RAM, Disk, OS
   // ----------------------------------------------------------
   async getSystemMetrics(): Promise<SystemMetrics> {
-    const [cpuData, cpuLoad, mem, fsSize, osInfo] = await Promise.all([
-      si.cpu(),
+    // Cache static info (CPU specs, OS) — only fetch once
+    if (!cachedStaticInfo) {
+      const [cpu, os] = await Promise.all([si.cpu(), si.osInfo()]);
+      cachedStaticInfo = { cpu, os };
+    }
+
+    const [cpuLoad, mem, fsSize] = await Promise.all([
       si.currentLoad(),
       si.mem(),
       si.fsSize(),
-      si.osInfo(),
     ]);
+    const cpuData = cachedStaticInfo.cpu;
+    const osInfo = cachedStaticInfo.os;
 
     const relevantDisks = fsSize.filter(
       (fs) => fs.size > 0 && !fs.fs.startsWith('tmpfs') && !fs.fs.startsWith('devtmpfs'),
@@ -247,6 +310,91 @@ class InfraService {
       if (error.statusCode === 304) return; // already running
       throw AppError.internal('No se pudo iniciar el contenedor: ' + error.message);
     }
+  }
+
+  // ----------------------------------------------------------
+  // pruneContainers — remove stopped/exited containers
+  // ----------------------------------------------------------
+  async pruneContainers(): Promise<{ removed: string[]; spaceReclaimedMb: number }> {
+    try {
+      const result = await getDocker().pruneContainers();
+      return {
+        removed:           result.ContainersDeleted ?? [],
+        spaceReclaimedMb:  Math.round((result.SpaceReclaimed ?? 0) / 1024 / 1024 * 100) / 100,
+      };
+    } catch (error: any) {
+      throw AppError.internal('No se pudo limpiar contenedores: ' + error.message);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // getContainerDetail — full inspect with env, mounts, network
+  // ----------------------------------------------------------
+  async getContainerDetail(id: string): Promise<Record<string, unknown>> {
+    try {
+      const container = getDocker().getContainer(id);
+      const info = await container.inspect();
+      const networks = info.NetworkSettings?.Networks ?? {};
+      const firstNet = Object.values(networks)[0] as any;
+      return {
+        id:           info.Id.slice(0, 12),
+        name:         info.Name.replace(/^\//, ''),
+        image:        info.Config?.Image ?? '',
+        state:        info.State?.Status ?? 'unknown',
+        running:      info.State?.Running ?? false,
+        startedAt:    info.State?.StartedAt ?? null,
+        created:      info.Created,
+        restartCount: info.RestartCount ?? 0,
+        platform:     info.Platform ?? 'linux',
+        cmd:          info.Config?.Cmd ?? [],
+        entrypoint:   info.Config?.Entrypoint ?? [],
+        env:          (info.Config?.Env ?? []).filter((e: string) => !e.toLowerCase().includes('password') && !e.toLowerCase().includes('secret') && !e.toLowerCase().includes('key')),
+        mounts:       (info.Mounts ?? []).map((m: any) => ({ type: m.Type, source: m.Source, destination: m.Destination, mode: m.Mode })),
+        networks:     Object.keys(networks),
+        ipAddress:    firstNet?.IPAddress ?? null,
+        ports:        Object.entries(info.NetworkSettings?.Ports ?? {}).flatMap(([key, bindings]: [string, any]) => {
+          const [privatePort, type] = key.split('/');
+          return (bindings ?? []).map((b: any) => ({ privatePort: parseInt(privatePort), publicPort: parseInt(b.HostPort), type }));
+        }),
+      };
+    } catch (error: any) {
+      if (error.statusCode === 404) throw AppError.notFound('Contenedor no encontrado');
+      throw AppError.internal('Docker error: ' + error.message);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // getTopProcesses — top 15 by CPU usage
+  // ----------------------------------------------------------
+  async getTopProcesses(): Promise<Array<{ pid: number; name: string; cpu: number; memMb: number; state: string; user: string }>> {
+    const procs = await si.processes();
+    return procs.list
+      .sort((a, b) => b.cpu - a.cpu)
+      .slice(0, 15)
+      .map(p => ({
+        pid:   p.pid,
+        name:  p.name,
+        cpu:   Math.round(p.cpu   * 10) / 10,
+        memMb: Math.round((p.mem_rss ?? 0) / 1024 / 1024 * 10) / 10,
+        state: p.state ?? '?',
+        user:  p.user  ?? '?',
+      }));
+  }
+
+  // ----------------------------------------------------------
+  // getNetworkStats — RX/TX per interface
+  // ----------------------------------------------------------
+  async getNetworkStats(): Promise<Array<{ iface: string; rxMb: number; txMb: number; rxSec: number; txSec: number }>> {
+    const nets = await si.networkStats();
+    return nets
+      .filter(n => n.iface && n.rx_bytes !== undefined)
+      .map(n => ({
+        iface: n.iface,
+        rxMb:  Math.round(n.rx_bytes  / 1024 / 1024 * 100) / 100,
+        txMb:  Math.round(n.tx_bytes  / 1024 / 1024 * 100) / 100,
+        rxSec: Math.round((n.rx_sec   ?? 0) / 1024),
+        txSec: Math.round((n.tx_sec   ?? 0) / 1024),
+      }));
   }
 
   // ----------------------------------------------------------

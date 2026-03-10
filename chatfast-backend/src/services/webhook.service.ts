@@ -1,15 +1,17 @@
 import { logger } from '../config/logger';
 import instanceRepository from '../repositories/instances.repository';
 import { prisma } from '../lib/prisma';
+import { evolutionApi } from '../config/evolution';
 
 // ============================================================
 // TIPOS — Estructura real de Evolution API v2
 // ============================================================
 
 interface MessageKey {
-  remoteJid: string;
-  fromMe:    boolean;
-  id:        string;
+  remoteJid:   string;
+  fromMe:      boolean;
+  id:          string;
+  participant?: string; // JID del miembro que envió en un grupo
 }
 
 interface PollVote {
@@ -23,19 +25,16 @@ interface IncomingMessage {
   message?: {
     conversation?:         string;
     extendedTextMessage?:  { text: string };
-    imageMessage?:         { caption?: string };
-    videoMessage?:         { caption?: string };
-    audioMessage?:         Record<string, unknown>;
-    documentMessage?:      { fileName?: string };
+    imageMessage?:         { caption?: string; url?: string; mimetype?: string };
+    videoMessage?:         { caption?: string; url?: string; mimetype?: string };
+    audioMessage?:         { url?: string; mimetype?: string; [k: string]: unknown };
+    documentMessage?:      { fileName?: string; url?: string; mimetype?: string };
     stickerMessage?:       Record<string, unknown>;
     reactionMessage?:      { text: string; key: MessageKey };
-    locationMessage?:      { degreesLatitude: number; degreesLongitude: number };
-    // ↓ Este es el tipo especial que llega cuando alguien vota en una encuesta
+    locationMessage?:      { degreesLatitude: number; degreesLongitude: number; name?: string; address?: string };
     pollUpdateMessage?: {
-      pollCreationMessageKey: MessageKey; // Key del poll original (para saber a cuál encuesta)
-      vote: {
-        selectedOptions: PollVote[];      // Opciones que el usuario seleccionó/deseleccionó
-      };
+      pollCreationMessageKey: MessageKey;
+      vote: { selectedOptions: PollVote[] };
     };
     pollCreationMessage?: {
       name:    string;
@@ -67,25 +66,53 @@ function isPollVote(msg: IncomingMessage): boolean {
  * Extrae texto legible de cualquier tipo de mensaje excepto pollUpdateMessage
  * (ese tiene su propio handler dedicado para automatización).
  */
-function extractMessageText(msg: IncomingMessage): string {
+interface MessageFields {
+  content:  string;
+  mediaUrl: string | null;
+  mediaKey: string | null;
+  mimetype: string | null;
+  caption:  string | null;
+}
+
+function normalizeMediaKey(raw: unknown): string | null {
+  if (!raw) return null;
+  if (typeof raw === 'string') return raw;
+  // Evolution API sometimes sends mediaKey as a byte-index object: {0: 90, 1: 159, ...}
+  if (typeof raw === 'object') {
+    const bytes = Object.values(raw as Record<string, number>);
+    return Buffer.from(bytes).toString('base64');
+  }
+  return null;
+}
+
+function extractMessageFields(msg: IncomingMessage): MessageFields {
   const m = msg.message;
-  if (!m) return '[sin contenido]';
+  if (!m) return { content: '[sin contenido]', mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
 
-  if (m.conversation)                    return m.conversation;
-  if (m.extendedTextMessage?.text)       return m.extendedTextMessage.text;
-  if (m.imageMessage?.caption)           return `🖼️ Imagen: ${m.imageMessage.caption}`;
-  if (m.imageMessage)                    return '🖼️ Imagen';
-  if (m.videoMessage?.caption)           return `🎥 Video: ${m.videoMessage.caption}`;
-  if (m.videoMessage)                    return '🎥 Video';
-  if (m.audioMessage)                    return '🎵 Audio';
-  if (m.documentMessage?.fileName)       return `📄 Documento: ${m.documentMessage.fileName}`;
-  if (m.documentMessage)                 return '📄 Documento';
-  if (m.stickerMessage)                  return '🎭 Sticker';
-  if (m.reactionMessage)                 return `⚡ Reacción: ${m.reactionMessage.text}`;
-  if (m.locationMessage)                 return `📍 Ubicación: ${m.locationMessage.degreesLatitude}, ${m.locationMessage.degreesLongitude}`;
-  if (m.pollCreationMessage)             return `📊 Encuesta: "${m.pollCreationMessage.name}"`;
+  if (m.conversation)              return { content: m.conversation,              mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+  if (m.extendedTextMessage?.text) return { content: m.extendedTextMessage.text, mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
 
-  return '[tipo de mensaje no reconocido]';
+  if (m.imageMessage)    return { content: '🖼️ Imagen',    mediaUrl: m.imageMessage.url    ?? null, mediaKey: normalizeMediaKey((m.imageMessage as any).mediaKey),    mimetype: m.imageMessage.mimetype    ?? 'image/jpeg', caption: m.imageMessage.caption    ?? null };
+  if (m.videoMessage)    return { content: '🎥 Video',     mediaUrl: m.videoMessage.url    ?? null, mediaKey: normalizeMediaKey((m.videoMessage as any).mediaKey),    mimetype: m.videoMessage.mimetype    ?? 'video/mp4',  caption: m.videoMessage.caption    ?? null };
+  if (m.audioMessage)    return { content: '🎵 Audio',     mediaUrl: (m.audioMessage as any).url ?? null, mediaKey: normalizeMediaKey((m.audioMessage as any).mediaKey), mimetype: (m.audioMessage as any).mimetype ?? 'audio/ogg', caption: null };
+  if (m.documentMessage) return { content: '📄 Documento', mediaUrl: m.documentMessage.url ?? null, mediaKey: normalizeMediaKey((m.documentMessage as any).mediaKey), mimetype: m.documentMessage.mimetype ?? 'application/octet-stream', caption: m.documentMessage.fileName ?? null };
+  if (m.stickerMessage)  return { content: '🎭 Sticker',   mediaUrl: (m.stickerMessage as any).url ?? null, mediaKey: normalizeMediaKey((m.stickerMessage as any).mediaKey), mimetype: (m.stickerMessage as any).mimetype ?? 'image/webp', caption: null };
+
+  if (m.locationMessage) {
+    const lat   = m.locationMessage.degreesLatitude;
+    const lng   = m.locationMessage.degreesLongitude;
+    const label = m.locationMessage.name ?? m.locationMessage.address ?? null;
+    return { content: `📍 ${label ?? `${lat},${lng}`}`, mediaUrl: `https://www.google.com/maps?q=${lat},${lng}`, mediaKey: null, mimetype: null, caption: label };
+  }
+
+  if (m.reactionMessage)     return { content: `⚡ Reacción: ${m.reactionMessage.text}`,         mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+  if (m.pollCreationMessage) return { content: `📊 Encuesta: "${m.pollCreationMessage.name}"`,  mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+
+  return { content: '[tipo de mensaje no reconocido]', mediaUrl: null, mediaKey: null, mimetype: null, caption: null };
+}
+
+function extractMessageText(msg: IncomingMessage): string {
+  return extractMessageFields(msg).content;
 }
 
 // ============================================================
@@ -119,6 +146,16 @@ export class WebhookService {
         case 'qrcode.updated':
         case 'QRCODE_UPDATED':
           logger.info('📱 QR actualizado', { instance });
+          break;
+
+        case 'groups.upsert':
+        case 'GROUPS_UPSERT':
+          await this.handleGroupsUpsert(instance, data);
+          break;
+
+        case 'groups.update':
+        case 'GROUPS_UPDATE':
+          await this.handleGroupsUpsert(instance, data);
           break;
 
         default:
@@ -165,6 +202,17 @@ export class WebhookService {
       if (remoteJid === 'status@broadcast') continue;
       if (remoteJid.endsWith('@lid'))        continue; // dispositivo vinculado
 
+      // ── Fix mensajes de grupo ──────────────────────────────────────────────
+      // Evolution API a veces envía mensajes de grupo con el JID del participante
+      // individual como remoteJid en lugar del JID del grupo (@g.us).
+      // Detectamos esto por: tiene key.participant Y remoteJid NO es @g.us.
+      // En ese caso lo ignoramos: el mismo mensaje llega (o llegará) con el JID
+      // correcto del grupo en otro evento.
+      if (msg.key.participant && !remoteJid.includes('@g.us')) {
+        logger.debug(`⏭️ Evento de participante de grupo ignorado (remoteJid individual): ${remoteJid}`);
+        continue;
+      }
+
       // Los votos de encuesta se procesan siempre (incluso fromMe:true en algunos casos)
       if (isPollVote(msg)) {
         await this.handlePollVote(instanceName, msg);
@@ -183,13 +231,14 @@ export class WebhookService {
   // El log incluye el messageId para poder usar mark-read y reactions.
   // ----------------------------------------------------------
   private async handleTextMessage(instanceName: string, msg: IncomingMessage): Promise<void> {
-    const text      = extractMessageText(msg);
+    const { content: text, mediaUrl, mediaKey, mimetype, caption } = extractMessageFields(msg);
     const sender    = msg.key.remoteJid;
     const pushName  = msg.pushName ?? null;
     const messageId = msg.key.id;
     const fromMe    = msg.key.fromMe;
 
-    logger.info(`📨 MENSAJE ${fromMe ? 'ENVIADO' : 'RECIBIDO'} | id: ${messageId} | remoteJid: ${sender} | de: ${pushName ?? 'Desconocido'} | texto: ${text}`);
+    const participant = msg.key.participant ?? null; // JID del miembro en grupos
+    logger.info(`📨 MENSAJE ${fromMe ? 'ENVIADO' : 'RECIBIDO'} | id: ${messageId} | remoteJid: ${sender} | de: ${pushName ?? participant ?? 'Desconocido'} | texto: ${text}`);
 
     try {
       const instance = await prisma.instance.findFirst({
@@ -201,30 +250,42 @@ export class WebhookService {
         return;
       }
 
-      const isGroup = sender.includes('@g.us');
-      const phone   = isGroup ? null : sender.replace(/@.*/, '');
-      const msgTs   = msg.messageTimestamp ? new Date(msg.messageTimestamp * 1000) : new Date();
+      const isGroup  = sender.includes('@g.us');
+      const phone    = isGroup ? null : sender.replace(/@.*/, '');
+      const msgTs    = msg.messageTimestamp ? new Date(msg.messageTimestamp * 1000) : new Date();
+
+      // senderName: nombre del remitente dentro del grupo.
+      // Solo se aplica a mensajes recibidos en grupos (pushName = nombre del que escribió).
+      // Para contactos individuales o mensajes propios, no se guarda.
+      const senderName = (isGroup && !fromMe && pushName) ? pushName : null;
 
       // Upsert contacto — solo incrementa unread en mensajes recibidos
+      // NOTA: En grupos NO actualizamos el nombre del contacto con pushName,
+      // ya que pushName es el nombre del miembro que escribió, no el nombre del grupo.
       const contact = await prisma.contact.upsert({
         where: { instanceId_remoteJid: { instanceId: instance.id, remoteJid: sender } },
         update: {
-          ...(pushName && !fromMe ? { name: pushName } : {}),
-          lastMessage: text,
+          ...(!isGroup && pushName && !fromMe ? { name: pushName } : {}),
+          lastMessage: isGroup && senderName ? `${senderName}: ${text}` : text,
           lastMessageAt: msgTs,
           ...(fromMe ? {} : { unreadCount: { increment: 1 } }),
         },
         create: {
           instanceId: instance.id,
           remoteJid: sender,
-          name: fromMe ? null : pushName,
+          name: fromMe ? null : (!isGroup ? pushName : null),
           phone,
           isGroup,
-          lastMessage: text,
+          lastMessage: isGroup && senderName ? `${senderName}: ${text}` : text,
           lastMessageAt: msgTs,
           unreadCount: fromMe ? 0 : 1,
         },
       });
+
+      // Si es un grupo nuevo sin nombre, obtener el subject en background
+      if (isGroup && !contact.name) {
+        this.fetchGroupNameInBackground(instanceName, contact.id, sender).catch(() => {});
+      }
 
       // Guardar mensaje (upsert por messageId para evitar duplicados del webhook)
       const msgType = msg.message
@@ -240,8 +301,13 @@ export class WebhookService {
           remoteJid: sender,
           messageId,
           fromMe,
+          senderName,
           type: msgType,
           content: text,
+          mediaUrl,
+          mediaKey,
+          mimetype,
+          caption,
           status: fromMe ? 'SENT' : 'DELIVERED',
           timestamp: msgTs,
         },
@@ -350,6 +416,59 @@ export class WebhookService {
     //     });
     // }
     // ──────────────────────────────────────────────────────────────
+  }
+
+  // ----------------------------------------------------------
+  // fetchGroupNameInBackground
+  //
+  // Cuando un mensaje de grupo llega por primera vez y el contacto
+  // se crea sin nombre (no tenemos el subject aún), llamamos a Evolution
+  // en background para obtener el subject real del grupo.
+  // ----------------------------------------------------------
+  private async fetchGroupNameInBackground(instanceName: string, contactId: string, groupJid: string): Promise<void> {
+    try {
+      const client = evolutionApi.getInstance();
+      // Evolution API v2: GET /group/fetchGroupMetaData/{instance}?groupJid=xxx
+      const { data } = await client.get(`/group/fetchGroupMetaData/${instanceName}`, {
+        params: { groupJid },
+      });
+      const subject = data?.subject ?? data?.name ?? null;
+      if (subject) {
+        await prisma.contact.update({ where: { id: contactId }, data: { name: subject } });
+        logger.info(`✅ Nombre de grupo actualizado: "${subject}" (${groupJid})`);
+      }
+    } catch (err: any) {
+      logger.debug(`⚠️ No se pudo obtener nombre del grupo ${groupJid}: ${err.message}`);
+    }
+  }
+
+  // ----------------------------------------------------------
+  // handleGroupsUpsert
+  //
+  // Procesa grupos.upsert / groups.update — actualiza el nombre
+  // (subject) de grupos ya guardados en DB.
+  // ----------------------------------------------------------
+  private async handleGroupsUpsert(instanceName: string, data: any): Promise<void> {
+    const groups: any[] = Array.isArray(data) ? data : (data ? [data] : []);
+    if (groups.length === 0) return;
+
+    const instance = await prisma.instance.findFirst({
+      where: { name: instanceName },
+      select: { id: true },
+    });
+    if (!instance) return;
+
+    for (const g of groups) {
+      const groupJid = g.id ?? g.jid ?? g.remoteJid ?? '';
+      const subject  = g.subject ?? g.name ?? null;
+      if (!groupJid || !subject || !groupJid.includes('@g.us')) continue;
+
+      await prisma.contact.updateMany({
+        where: { instanceId: instance.id, remoteJid: groupJid },
+        data:  { name: subject },
+      });
+      logger.info(`✅ Nombre de grupo sincronizado vía evento: "${subject}" (${groupJid})`);
+    }
   }
 
   // ----------------------------------------------------------

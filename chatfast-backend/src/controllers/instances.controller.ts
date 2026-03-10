@@ -283,6 +283,40 @@ class InstanceController {
       }
     }
   }
+
+  // ----------------------------------------------------------
+  // GET /api/v1/instances/:id/settings
+  // ----------------------------------------------------------
+  async getSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id } = req.params;
+      const settings = await instanceService.getSettings(id);
+      ApiResponder.success(res, settings, 'Configuración obtenida exitosamente');
+    } catch (error: any) {
+      if (error.message?.includes('no encontrada') || error.code === 'NOT_FOUND') {
+        ApiResponder.error(res, error.message, ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND);
+      } else {
+        next(error);
+      }
+    }
+  }
+
+  // ----------------------------------------------------------
+  // PUT /api/v1/instances/:id/settings
+  // ----------------------------------------------------------
+  async updateSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id } = req.params;
+      const result = await instanceService.updateSettings(id, req.body);
+      ApiResponder.success(res, result, 'Configuración actualizada correctamente');
+    } catch (error: any) {
+      if (error.message?.includes('no encontrada') || error.code === 'NOT_FOUND') {
+        ApiResponder.error(res, error.message, ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND);
+      } else {
+        next(error);
+      }
+    }
+  }
 }
 
 export const instanceController = new InstanceController();

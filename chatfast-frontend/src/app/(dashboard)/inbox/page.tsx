@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, RefreshCw, Send, MessageSquare, Users, Check, CheckCheck,
   Image as ImageIcon, Mic, FileText, MapPin, ChevronDown, Loader2,
-  Wifi, WifiOff, Smartphone, RefreshCcw,
+  Wifi, WifiOff, Smartphone, RefreshCcw, Globe,
+  Play, Pause, Download, X, SquarePen, Phone,
 } from 'lucide-react';
 import { instancesApi, contactsApi } from '@/lib/api';
 import { formatRelativeTime, cn } from '@/lib/utils';
@@ -54,19 +55,647 @@ function avatarColor(remoteJid: string): string {
   return colors[Math.abs(hash) % colors.length];
 }
 
-function msgIcon(type: string): React.ReactNode {
-  if (type === 'imageMessage')    return <ImageIcon size={12} className="inline-block mr-1" />;
-  if (type === 'videoMessage')    return <ImageIcon size={12} className="inline-block mr-1" />;
-  if (type === 'audioMessage')    return <Mic size={12} className="inline-block mr-1" />;
-  if (type === 'documentMessage') return <FileText size={12} className="inline-block mr-1" />;
-  if (type === 'locationMessage') return <MapPin size={12} className="inline-block mr-1" />;
-  return null;
+// ─── Sender color (deterministic per name, for group messages) ────────────────
+
+const SENDER_PALETTE = [
+  '#E91E63', '#9C27B0', '#3F51B5', '#1976D2',
+  '#0097A7', '#00796B', '#388E3C', '#F57C00',
+  '#E64A19', '#5D4037', '#455A64', '#C62828',
+];
+
+function senderColor(name: string): string {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+  return SENDER_PALETTE[Math.abs(h) % SENDER_PALETTE.length];
+}
+
+// ─── URL detection ────────────────────────────────────────────────────────────
+
+const URL_RE = /https?:\/\/[^\s<>"]+/g;
+
+function renderTextWithLinks(text: string, isMe: boolean): React.ReactNode {
+  const parts = text.split(URL_RE);
+  const urls  = text.match(URL_RE) ?? [];
+  const nodes: React.ReactNode[] = [];
+  parts.forEach((part, i) => {
+    if (part) nodes.push(<span key={`t${i}`}>{part}</span>);
+    if (urls[i]) {
+      let display: string;
+      try { display = new URL(urls[i]).hostname; } catch { display = urls[i]; }
+      nodes.push(
+        <a
+          key={`u${i}`} href={urls[i]} target="_blank" rel="noopener noreferrer"
+          className={cn(
+            'underline underline-offset-2 break-all',
+            isMe ? 'text-white/90 hover:text-white' : 'text-[var(--accent)] hover:opacity-80',
+          )}
+        >
+          {urls[i]}
+        </a>
+      );
+      // Link preview chip (domain only)
+      nodes.push(
+        <div key={`lp${i}`} className={cn(
+          'mt-1.5 flex items-center gap-1.5 rounded-[6px] px-2 py-1.5 text-[11px]',
+          isMe ? 'bg-white/15' : 'bg-[var(--border)]/60',
+        )}>
+          <Globe size={11} className={isMe ? 'text-white/70' : 'text-[var(--fg-tertiary)]'} />
+          <span className={isMe ? 'text-white/80' : 'text-[var(--fg-secondary)]'}>{display}</span>
+        </div>
+      );
+    }
+  });
+  return <>{nodes}</>;
 }
 
 function StatusTick({ status }: { status: string }) {
   if (status === 'READ')      return <CheckCheck size={13} className="text-blue-400 flex-shrink-0" />;
   if (status === 'DELIVERED') return <CheckCheck size={13} className="text-[var(--fg-tertiary)] flex-shrink-0" />;
   return <Check size={13} className="text-[var(--fg-tertiary)] flex-shrink-0" />;
+}
+
+// ─── Image Modal ──────────────────────────────────────────────────────────────
+
+function ImageModal({ src, caption, onClose }: { src: string; caption?: string | null; onClose: () => void }) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const handleDownload = () => {
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = caption ?? 'imagen';
+    a.click();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      {/* Controls */}
+      <div className="absolute top-4 right-4 flex gap-2 z-10">
+        <button
+          onClick={(e) => { e.stopPropagation(); handleDownload(); }}
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          title="Descargar"
+        >
+          <Download size={16} className="text-white" />
+        </button>
+        <button
+          onClick={onClose}
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          title="Cerrar"
+        >
+          <X size={16} className="text-white" />
+        </button>
+      </div>
+
+      {/* Image */}
+      <div className="flex flex-col items-center gap-3 max-w-[90vw] max-h-[90vh]" onClick={e => e.stopPropagation()}>
+        <img
+          src={src}
+          alt={caption ?? 'Imagen'}
+          className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+        />
+        {caption && (
+          <p className="text-white/70 text-[13px] text-center max-w-lg">{caption}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Authenticated Image ─────────────────────────────────────────────────────
+
+function AuthImage({
+  instanceId, contactId, messageId, caption, isMe,
+}: {
+  instanceId: string; contactId: string; messageId: string;
+  caption?: string | null; isMe: boolean;
+}) {
+  const [src,        setSrc]        = useState<string | null>(null);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState(false);
+  const [modalOpen,  setModalOpen]  = useState(false);
+
+  useEffect(() => {
+    let objectUrl: string | null = null;
+    setLoading(true); setError(false); setSrc(null);
+    contactsApi.getMedia(instanceId, contactId, messageId)
+      .then(({ data }) => {
+        objectUrl = URL.createObjectURL(data as Blob);
+        setSrc(objectUrl);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+    return () => { if (objectUrl) URL.revokeObjectURL(objectUrl); };
+  }, [instanceId, contactId, messageId]);
+
+  const bg = isMe ? 'bg-white/15' : 'bg-[var(--border)]/50';
+
+  if (loading) return (
+    <div className={cn('w-[220px] h-[140px] rounded-[10px] flex items-center justify-center', bg)}>
+      <Spinner className="w-5 h-5" />
+    </div>
+  );
+  if (error || !src) return (
+    <div className={cn('w-[220px] h-[80px] rounded-[10px] flex items-center justify-center gap-2', bg)}>
+      <ImageIcon size={16} className={isMe ? 'text-white/60' : 'text-[var(--fg-tertiary)]'} />
+      <span className={cn('text-[12px]', isMe ? 'text-white/70' : 'text-[var(--fg-tertiary)]')}>No disponible</span>
+    </div>
+  );
+  return (
+    <>
+      {modalOpen && <ImageModal src={src} caption={caption} onClose={() => setModalOpen(false)} />}
+      <div className="flex flex-col gap-1.5">
+        <button onClick={() => setModalOpen(true)} className="block p-0 border-0 bg-transparent cursor-zoom-in">
+          <img
+            src={src} alt={caption ?? 'Imagen'}
+            className="rounded-[10px] max-w-[240px] max-h-[300px] object-cover hover:opacity-90 transition-opacity"
+          />
+        </button>
+        {caption && (
+          <span className={cn('text-[13px] leading-snug', isMe ? 'text-white/90' : 'text-[var(--fg)]')}>{caption}</span>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ─── Authenticated Audio ──────────────────────────────────────────────────────
+
+function formatDuration(secs: number): string {
+  if (!isFinite(secs) || secs < 0) return '0:00';
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function AuthAudio({
+  instanceId, contactId, messageId, isMe,
+}: {
+  instanceId: string; contactId: string; messageId: string; isMe: boolean;
+}) {
+  const [audioUrl,  setAudioUrl]  = useState<string | null>(null);
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState(false);
+  const [playing,   setPlaying]   = useState(false);
+  const [duration,  setDuration]  = useState(0);
+  const [current,   setCurrent]   = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    let url: string | null = null;
+    setLoading(true); setError(false);
+    contactsApi.getMedia(instanceId, contactId, messageId)
+      .then(({ data }) => {
+        url = URL.createObjectURL(data as Blob);
+        setAudioUrl(url);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+    return () => { if (url) URL.revokeObjectURL(url); };
+  }, [instanceId, contactId, messageId]);
+
+  const togglePlay = () => {
+    if (!audioRef.current || !audioUrl) return;
+    if (playing) audioRef.current.pause();
+    else audioRef.current.play();
+  };
+
+  const bg   = isMe ? 'bg-white/15' : 'bg-[var(--border)]/50';
+  const base = isMe ? 'text-white/80' : 'text-[var(--fg-secondary)]';
+  const progress = duration > 0 ? current / duration : 0;
+
+  return (
+    <div className={cn('flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 w-[230px]', bg)}>
+      {audioUrl && (
+        <audio
+          ref={audioRef}
+          src={audioUrl}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => { setPlaying(false); setCurrent(0); if (audioRef.current) audioRef.current.currentTime = 0; }}
+          onTimeUpdate={() => setCurrent(audioRef.current?.currentTime ?? 0)}
+          onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
+        />
+      )}
+
+      {/* Play/Pause button */}
+      <button
+        onClick={togglePlay}
+        disabled={loading || error || !audioUrl}
+        className={cn(
+          'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors',
+          loading || error || !audioUrl
+            ? isMe ? 'bg-white/10 opacity-50' : 'bg-[var(--border)] opacity-50'
+            : isMe ? 'bg-white/25 hover:bg-white/35' : 'bg-[var(--accent)]/20 hover:bg-[var(--accent)]/30',
+        )}
+      >
+        {loading
+          ? <Spinner className="w-3.5 h-3.5" />
+          : error
+            ? <Mic size={14} className={base} />
+            : playing
+              ? <Pause size={14} className={isMe ? 'text-white' : 'text-[var(--accent)]'} />
+              : <Play size={14} className={isMe ? 'text-white' : 'text-[var(--accent)]'} />
+        }
+      </button>
+
+      {/* Waveform + time */}
+      <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+        {/* Waveform bars with progress tint */}
+        <div className="flex gap-[2px] items-center h-5">
+          {Array.from({ length: 20 }).map((_, i) => {
+            const filled = i / 20 <= progress;
+            return (
+              <div
+                key={i}
+                style={{ height: `${4 + Math.abs(Math.sin(i * 0.85 + 1)) * 11}px` }}
+                className={cn(
+                  'w-[2px] rounded-full flex-shrink-0 transition-colors',
+                  filled
+                    ? isMe ? 'bg-white/90' : 'bg-[var(--accent)]'
+                    : isMe ? 'bg-white/35'  : 'bg-[var(--fg-tertiary)]/50',
+                )}
+              />
+            );
+          })}
+        </div>
+        {/* Duration */}
+        <span className={cn('text-[10px] font-mono leading-none', isMe ? 'text-white/55' : 'text-[var(--fg-tertiary)]')}>
+          {formatDuration(playing || current > 0 ? current : duration)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Authenticated Document ───────────────────────────────────────────────────
+
+function AuthDocument({
+  instanceId, contactId, messageId, name, isMe,
+}: {
+  instanceId: string; contactId: string; messageId: string;
+  name: string; isMe: boolean;
+}) {
+  const [downloading, setDownloading] = useState(false);
+  const [done,        setDone]        = useState(false);
+  const [error,       setError]       = useState(false);
+
+  const bg   = isMe ? 'bg-white/15' : 'bg-[var(--border)]/50';
+  const base = isMe ? 'text-white/80' : 'text-[var(--fg-secondary)]';
+
+  const ext = name.split('.').pop()?.toUpperCase() ?? 'DOC';
+
+  const handleDownload = async () => {
+    if (downloading) return;
+    setDownloading(true); setError(false);
+    try {
+      const { data } = await contactsApi.getMedia(instanceId, contactId, messageId);
+      const url = URL.createObjectURL(data as Blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; a.click();
+      URL.revokeObjectURL(url);
+      setDone(true);
+      setTimeout(() => setDone(false), 3000);
+    } catch {
+      setError(true);
+      setTimeout(() => setError(false), 3000);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDownload}
+      className={cn(
+        'flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 max-w-[250px] w-full text-left',
+        'transition-opacity hover:opacity-80 active:opacity-70',
+        bg,
+      )}
+    >
+      {/* Icon with ext label */}
+      <div className={cn(
+        'w-10 h-10 rounded-lg flex flex-col items-center justify-center flex-shrink-0 gap-0',
+        isMe ? 'bg-white/20' : 'bg-[var(--border)]',
+      )}>
+        <FileText size={16} className={base} />
+        <span className={cn('text-[8px] font-bold leading-none mt-0.5', isMe ? 'text-white/60' : 'text-[var(--fg-tertiary)]')}>
+          {ext}
+        </span>
+      </div>
+
+      {/* Name + status */}
+      <div className="flex-1 min-w-0">
+        <p className={cn('text-[12px] font-medium truncate leading-snug', base)}>{name}</p>
+        <p className={cn('text-[10px] mt-0.5', isMe ? 'text-white/50' : 'text-[var(--fg-tertiary)]')}>
+          {downloading ? 'Descargando…' : done ? '✓ Descargado' : error ? 'Error al descargar' : 'Toca para descargar'}
+        </p>
+      </div>
+
+      {/* Download icon */}
+      <div className="flex-shrink-0">
+        {downloading
+          ? <Spinner className="w-3.5 h-3.5" />
+          : <Download size={14} className={isMe ? 'text-white/50' : 'text-[var(--fg-tertiary)]'} />
+        }
+      </div>
+    </button>
+  );
+}
+
+// ─── Media Body ───────────────────────────────────────────────────────────────
+
+function MediaBody({ msg, isMe }: { msg: Message; isMe: boolean }) {
+  const base = isMe ? 'text-white/80' : 'text-[var(--fg-secondary)]';
+  const bg   = isMe ? 'bg-white/15' : 'bg-[var(--border)]/50';
+
+  // ── Imagen ──────────────────────────────────────────────────────────────────
+  if (msg.type === 'imageMessage') {
+    return (
+      <AuthImage
+        instanceId={msg.instanceId}
+        contactId={msg.contactId}
+        messageId={msg.id}
+        caption={msg.caption}
+        isMe={isMe}
+      />
+    );
+  }
+
+  // ── Video ───────────────────────────────────────────────────────────────────
+  if (msg.type === 'videoMessage') {
+    return (
+      <div className="flex flex-col gap-1">
+        <div className={cn('flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 w-[200px]', bg)}>
+          <div className={cn('w-8 h-8 rounded-full flex items-center justify-center', isMe ? 'bg-white/20' : 'bg-[var(--border)]')}>
+            <ImageIcon size={16} className={base} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className={cn('text-[12px] font-medium', base)}>Video</p>
+            {msg.caption && <p className={cn('text-[11px] truncate', isMe ? 'text-white/60' : 'text-[var(--fg-tertiary)]')}>{msg.caption}</p>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Audio ───────────────────────────────────────────────────────────────────
+  if (msg.type === 'audioMessage') {
+    return (
+      <AuthAudio
+        instanceId={msg.instanceId}
+        contactId={msg.contactId}
+        messageId={msg.id}
+        isMe={isMe}
+      />
+    );
+  }
+
+  // ── Documento ───────────────────────────────────────────────────────────────
+  if (msg.type === 'documentMessage') {
+    const name = msg.caption ?? msg.content?.replace(/^📄\s*(Documento:?\s*)?/, '') ?? 'Documento';
+    return (
+      <AuthDocument
+        instanceId={msg.instanceId}
+        contactId={msg.contactId}
+        messageId={msg.id}
+        name={name}
+        isMe={isMe}
+      />
+    );
+  }
+
+  // ── Localización ─────────────────────────────────────────────────────────────
+  if (msg.type === 'locationMessage') {
+    const mapsUrl = msg.mediaUrl ?? (() => {
+      // Fallback: intentar parsear del content "📍 lat,lng"
+      const match = (msg.content ?? '').match(/(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/);
+      return match ? `https://www.google.com/maps?q=${match[1]},${match[2]}` : null;
+    })();
+    const label = msg.caption ?? msg.content?.replace(/^📍\s*/, '') ?? 'Ubicación';
+
+    return (
+      <a
+        href={mapsUrl ?? '#'}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          'flex items-center gap-3 rounded-[10px] px-3 py-2.5 max-w-[240px] transition-opacity hover:opacity-80',
+          bg, !mapsUrl && 'pointer-events-none',
+        )}
+      >
+        {/* Mini mapa estático (OpenStreetMap iframe no requiere API key) */}
+        <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0', isMe ? 'bg-white/20' : 'bg-[var(--accent)]/15')}>
+          <MapPin size={20} className={isMe ? 'text-white/80' : 'text-[var(--accent)]'} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={cn('text-[12px] font-medium truncate', base)}>{label}</p>
+          <p className={cn('text-[10px]', isMe ? 'text-white/55' : 'text-[var(--fg-tertiary)]')}>
+            {mapsUrl ? 'Toca para abrir en Maps' : 'Ubicación'}
+          </p>
+        </div>
+        {mapsUrl && <Globe size={12} className={isMe ? 'text-white/50' : 'text-[var(--fg-tertiary)]'} />}
+      </a>
+    );
+  }
+
+  // ── Sticker ──────────────────────────────────────────────────────────────────
+  if (msg.type === 'stickerMessage') {
+    return <span className="text-3xl leading-none">🎭</span>;
+  }
+
+  // ── Texto (con detección de links) ────────────────────────────────────────
+  const text = msg.content ?? '(sin contenido)';
+  const hasUrl = URL_RE.test(text);
+  URL_RE.lastIndex = 0;
+  return (
+    <span className="break-words whitespace-pre-wrap text-[13.5px] leading-relaxed">
+      {hasUrl ? renderTextWithLinks(text, isMe) : text}
+    </span>
+  );
+}
+
+// ─── New Chat Modal ───────────────────────────────────────────────────────────
+
+function NewChatModal({
+  instanceId,
+  onClose,
+  onSelect,
+}: {
+  instanceId: string;
+  onClose: () => void;
+  onSelect: (contact: Contact) => void;
+}) {
+  const [query,       setQuery]       = useState('');
+  const [phone,       setPhone]       = useState('');
+  const [phoneError,  setPhoneError]  = useState('');
+  const [starting,    setStarting]    = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handler);
+    inputRef.current?.focus();
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  // Search contacts in DB (includes phonebook contacts after sync)
+  const { data: searchData, isLoading: searching } = useQuery({
+    queryKey: ['new-chat-search', instanceId, query],
+    queryFn: async () => {
+      if (!query.trim()) return { items: [] as Contact[] };
+      const { data } = await contactsApi.list(instanceId, { search: query.trim(), limit: 20 });
+      return (data as ApiResponse<{ items: Contact[]; pagination: any }>).data;
+    },
+    enabled: query.trim().length >= 2,
+    staleTime: 10_000,
+  });
+
+  const results = searchData?.items ?? [];
+
+  const handleStartByPhone = async () => {
+    const normalized = phone.replace(/[\s\-\(\)\+]/g, '');
+    if (!normalized || !/^\d{7,15}$/.test(normalized)) {
+      setPhoneError('Ingresa un número válido (solo dígitos, con código de país)');
+      return;
+    }
+    setPhoneError('');
+    setStarting(true);
+    try {
+      const { data } = await contactsApi.startChat(instanceId, normalized);
+      onSelect((data as ApiResponse<Contact>).data);
+      onClose();
+    } catch (e: any) {
+      setPhoneError(e.response?.data?.error?.message ?? 'Error al iniciar chat');
+    } finally {
+      setStarting(false);
+    }
+  };
+
+  const handleSelectContact = async (contact: Contact) => {
+    onSelect(contact);
+    onClose();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-[12vh]"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-[420px] bg-[var(--bg-elevated)] border border-[var(--border)] rounded-[16px] shadow-2xl overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2">
+            <SquarePen size={15} className="text-[var(--accent)]" />
+            <span className="text-[14px] font-semibold text-[var(--fg)]">Nueva conversación</span>
+          </div>
+          <button onClick={onClose} className="w-6 h-6 rounded-full hover:bg-[var(--border)] flex items-center justify-center transition-colors">
+            <X size={13} className="text-[var(--fg-tertiary)]" />
+          </button>
+        </div>
+
+        {/* Search section */}
+        <div className="p-4 border-b border-[var(--border)]">
+          <p className="text-[11px] text-[var(--fg-tertiary)] mb-2 font-medium uppercase tracking-wide">Buscar contacto</p>
+          <div className="relative">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fg-tertiary)]" />
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Nombre o número…"
+              className="w-full h-9 pl-8 pr-3 rounded-[8px] text-[13px] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] placeholder:text-[var(--fg-tertiary)] outline-none focus:border-[var(--accent)]/60 transition-colors"
+            />
+          </div>
+
+          {/* Results */}
+          {query.trim().length >= 2 && (
+            <div className="mt-2 max-h-[220px] overflow-y-auto rounded-[8px] border border-[var(--border)] bg-[var(--bg)]">
+              {searching ? (
+                <div className="flex items-center justify-center py-6">
+                  <Spinner />
+                </div>
+              ) : results.length === 0 ? (
+                <p className="text-[12px] text-[var(--fg-tertiary)] text-center py-4">Sin resultados</p>
+              ) : (
+                results.map(contact => {
+                  const name = getDisplayName(contact);
+                  const initials = name.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2).toUpperCase() || '?';
+                  return (
+                    <button
+                      key={contact.id}
+                      onClick={() => handleSelectContact(contact)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-[var(--border)]/30 transition-colors text-left"
+                    >
+                      <div className={cn(
+                        'w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold text-white flex-shrink-0',
+                        contact.isGroup ? 'bg-[var(--accent)]/20' : avatarColor(contact.remoteJid),
+                      )}>
+                        {contact.profilePic ? (
+                          <img src={contact.profilePic} alt="" className="w-8 h-8 rounded-full object-cover" />
+                        ) : contact.isGroup ? <Users size={14} /> : initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[13px] font-medium text-[var(--fg)] truncate">{name}</p>
+                        {contact.phone && (
+                          <p className="text-[11px] text-[var(--fg-tertiary)] font-mono">+{contact.phone}</p>
+                        )}
+                      </div>
+                      {contact.lastMessageAt && (
+                        <span className="text-[10px] text-[var(--fg-tertiary)] flex-shrink-0">{formatTime(contact.lastMessageAt)}</span>
+                      )}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Manual phone entry */}
+        <div className="p-4">
+          <p className="text-[11px] text-[var(--fg-tertiary)] mb-2 font-medium uppercase tracking-wide">O ingresa un número</p>
+          <p className="text-[11px] text-[var(--fg-tertiary)] mb-2">Con código de país, sin el signo +. Ej: 521234567890</p>
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fg-tertiary)]" />
+              <input
+                value={phone}
+                onChange={e => { setPhone(e.target.value); setPhoneError(''); }}
+                onKeyDown={e => { if (e.key === 'Enter') handleStartByPhone(); }}
+                placeholder="521234567890"
+                className="w-full h-9 pl-8 pr-3 rounded-[8px] text-[13px] bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] placeholder:text-[var(--fg-tertiary)] outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
+              />
+            </div>
+            <button
+              onClick={handleStartByPhone}
+              disabled={starting || !phone.trim()}
+              className={cn(
+                'h-9 px-4 rounded-[8px] text-[13px] font-medium flex items-center gap-1.5 flex-shrink-0 transition-colors',
+                phone.trim() && !starting
+                  ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]'
+                  : 'bg-[var(--border)]/50 text-[var(--fg-tertiary)] cursor-not-allowed',
+              )}
+            >
+              {starting ? <Spinner className="w-3.5 h-3.5" /> : 'Iniciar'}
+            </button>
+          </div>
+          {phoneError && (
+            <p className="text-[11px] text-[var(--destructive)] mt-1.5">{phoneError}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 // ─── Instance Selector ────────────────────────────────────────────────────────
@@ -263,37 +892,79 @@ function ContactItem({
 
 // ─── Message Bubble ───────────────────────────────────────────────────────────
 
-function MessageBubble({ msg, prevFromMe }: { msg: Message; prevFromMe: boolean | null }) {
+function MessageBubble({
+  msg,
+  prevMsg,
+  isGroup,
+}: {
+  msg: Message;
+  prevMsg: Message | null;
+  isGroup: boolean;
+}) {
   const isMe = msg.fromMe;
-  const showBubbleTail = prevFromMe !== isMe;
+
+  // Grouping: same sender within 2 min = consecutive block
+  const sameBlock = (() => {
+    if (!prevMsg) return false;
+    if (prevMsg.fromMe !== msg.fromMe) return false;
+    // In groups, also check sender name matches
+    if (isGroup && !isMe && prevMsg.senderName !== msg.senderName) return false;
+    const gap = new Date(msg.timestamp).getTime() - new Date(prevMsg.timestamp).getTime();
+    return gap < 2 * 60 * 1000;
+  })();
+
+  const color     = (!isMe && msg.senderName) ? senderColor(msg.senderName) : '';
+  const showName  = isGroup && !isMe && !sameBlock && !!msg.senderName;
+  const showTail  = !sameBlock;
+  const topMargin = sameBlock ? 'mt-[2px]' : 'mt-2';
 
   return (
-    <div className={cn('flex', isMe ? 'justify-end' : 'justify-start', 'mb-0.5')}>
-      <div
-        className={cn(
-          'max-w-[72%] px-3 py-2 rounded-[12px] text-[13.5px] leading-relaxed',
-          isMe
-            ? 'bg-[var(--accent)] text-white rounded-br-[4px]'
-            : 'bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)] rounded-bl-[4px]',
-          showBubbleTail
-            ? isMe ? 'rounded-br-[4px]' : 'rounded-bl-[4px]'
-            : '',
+    <div className={cn('flex items-end gap-2', isMe ? 'justify-end' : 'justify-start', topMargin)}>
+      {/* Avatar placeholder (keeps alignment even when hidden) */}
+      {!isMe && (
+        <div className={cn('w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-[11px] font-bold text-white mb-0.5',
+          sameBlock ? 'invisible' : ''
         )}
-      >
-        {/* Content */}
-        <div className="flex flex-col gap-0.5">
-          {msgIcon(msg.type)}
-          <span className="break-words whitespace-pre-wrap">
-            {msg.content ?? '(sin contenido)'}
-          </span>
+          style={{ backgroundColor: color || 'var(--accent)' }}
+        >
+          {msg.senderName ? msg.senderName.charAt(0).toUpperCase() : '?'}
         </div>
+      )}
 
-        {/* Meta */}
-        <div className={cn('flex items-center justify-end gap-1 mt-1', isMe ? 'text-white/60' : 'text-[var(--fg-tertiary)]')}>
-          <span className="text-[10px]">{formatTime(msg.timestamp)}</span>
-          {isMe && <StatusTick status={msg.status} />}
+      {/* Bubble */}
+      <div className={cn('flex flex-col', isMe ? 'items-end' : 'items-start', 'max-w-[72%]')}>
+        {/* Sender name */}
+        {showName && (
+          <span className="text-[11px] font-semibold mb-0.5 px-1" style={{ color }}>
+            {msg.senderName}
+          </span>
+        )}
+
+        <div className={cn(
+          'px-3 py-2 text-[13.5px]',
+          isMe
+            ? 'bg-[var(--accent)] text-white'
+            : 'bg-[var(--bg-elevated)] text-[var(--fg)] border border-[var(--border)]',
+          // Corner rounding — tail on first message of block
+          isMe
+            ? cn('rounded-[14px]', showTail ? 'rounded-br-[4px]' : '')
+            : cn('rounded-[14px]', showTail ? 'rounded-bl-[4px]' : ''),
+        )}>
+          <MediaBody msg={msg} isMe={isMe} />
+
+          {/* Meta row */}
+          <div className={cn(
+            'flex items-center justify-end gap-1 mt-1',
+            isMe ? 'text-white/55' : 'text-[var(--fg-tertiary)]',
+          )}>
+            <span className="text-[10px]">{formatTime(msg.timestamp)}</span>
+            {isMe && <StatusTick status={msg.status} />}
+          </div>
         </div>
       </div>
+
+      {/* Right spacer for incoming (keeps "sent" messages from touching edge) */}
+      {!isMe && <div className="w-7 flex-shrink-0" />}
     </div>
   );
 }
@@ -311,6 +982,49 @@ function ChatPanel({
   const [text, setText] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const presenceTimer    = useRef<ReturnType<typeof setTimeout>  | null>(null);
+  const presenceInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isComposing      = useRef(false);
+
+  // Número de destino para presence (mismo formato que sendText)
+  const presenceNumber = contact.isGroup
+    ? contact.remoteJid
+    : (contact.phone ?? contact.remoteJid.replace(/@.*/, ''));
+
+  const sendPresence = useCallback((state: 'composing' | 'paused') => {
+    contactsApi.sendPresence(instanceId, presenceNumber, state).catch(() => {});
+  }, [instanceId, presenceNumber]);
+
+  /** Para el indicador y limpia todos los timers */
+  const stopComposing = useCallback(() => {
+    if (presenceTimer.current)    { clearTimeout(presenceTimer.current);   presenceTimer.current    = null; }
+    if (presenceInterval.current) { clearInterval(presenceInterval.current); presenceInterval.current = null; }
+    if (isComposing.current) {
+      isComposing.current = false;
+      sendPresence('paused');
+    }
+  }, [sendPresence]);
+
+  /** Inicia o mantiene vivo el indicador "escribiendo..." */
+  const startComposing = useCallback(() => {
+    if (!isComposing.current) {
+      isComposing.current = true;
+      sendPresence('composing');
+      // Reenviar composing cada 2s para que no desaparezca mientras sigue escribiendo
+      presenceInterval.current = setInterval(() => sendPresence('composing'), 2000);
+    }
+    // Reiniciar el timer de inactividad: 3s sin escribir → paused
+    if (presenceTimer.current) clearTimeout(presenceTimer.current);
+    presenceTimer.current = setTimeout(stopComposing, 3000);
+  }, [sendPresence, stopComposing]);
+
+  // Limpia todo al desmontar o cambiar de contacto
+  useEffect(() => {
+    return () => {
+      if (presenceTimer.current)    clearTimeout(presenceTimer.current);
+      if (presenceInterval.current) clearInterval(presenceInterval.current);
+    };
+  }, [contact.id]);
 
   // Fetch messages — auto-marks as read on backend
   const { data: msgsData, isLoading } = useQuery({
@@ -354,6 +1068,10 @@ function ChatPanel({
   const handleSend = () => {
     const trimmed = text.trim();
     if (!trimmed || send.isPending) return;
+    // Cancelar timers sin enviar "paused" — el mensaje ya sale
+    if (presenceTimer.current)    { clearTimeout(presenceTimer.current);   presenceTimer.current    = null; }
+    if (presenceInterval.current) { clearInterval(presenceInterval.current); presenceInterval.current = null; }
+    isComposing.current = false;
     send.mutate(trimmed);
   };
 
@@ -412,7 +1130,8 @@ function ChatPanel({
               <MessageBubble
                 key={msg.id}
                 msg={msg}
-                prevFromMe={i > 0 ? messages[i - 1].fromMe : null}
+                prevMsg={i > 0 ? messages[i - 1] : null}
+                isGroup={contact.isGroup}
               />
             ))}
           </>
@@ -433,7 +1152,15 @@ function ChatPanel({
           <textarea
             ref={inputRef}
             value={text}
-            onChange={e => setText(e.target.value)}
+            onChange={e => {
+              const val = e.target.value;
+              setText(val);
+              if (val.trim()) {
+                startComposing();
+              } else {
+                stopComposing();
+              }
+            }}
             onKeyDown={handleKeyDown}
             placeholder="Escribe un mensaje… (Enter para enviar, Shift+Enter para nueva línea)"
             rows={1}
@@ -495,6 +1222,7 @@ export default function InboxPage() {
   const [search, setSearch] = useState('');
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
+  const [newChatOpen, setNewChatOpen] = useState(false);
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -547,6 +1275,15 @@ export default function InboxPage() {
   return (
     // Stretch to fill the dashboard main area (counteract p-6)
     <div className="-m-6 flex" style={{ height: 'calc(100vh - 3.5rem)' }}>
+      {/* New Chat Modal */}
+      {newChatOpen && instanceId && (
+        <NewChatModal
+          instanceId={instanceId}
+          onClose={() => setNewChatOpen(false)}
+          onSelect={(contact) => { setSelectedContact(contact); setNewChatOpen(false); }}
+        />
+      )}
+
       {/* ── Left Panel: Contacts ───────────────────────────────── */}
       <div className="w-[340px] flex-shrink-0 flex flex-col border-r border-[var(--border)] bg-[var(--bg-elevated)]">
         {/* Instance selector */}
@@ -554,7 +1291,7 @@ export default function InboxPage() {
           <InstanceSelector selected={instance} onSelect={handleInstanceSelect} />
         </div>
 
-        {/* Search + Sync */}
+        {/* Search + Sync + New Chat */}
         <div className="flex items-center gap-2 px-3 py-2 border-b border-[var(--border)]">
           <div className="relative flex-1">
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--fg-tertiary)]" />
@@ -572,6 +1309,14 @@ export default function InboxPage() {
             className="w-8 h-8 rounded-[8px] flex items-center justify-center border border-[var(--border)] text-[var(--fg-tertiary)] hover:text-[var(--accent)] hover:border-[var(--accent)]/50 transition-colors disabled:opacity-40"
           >
             {syncing ? <Loader2 size={13} className="animate-spin" /> : <RefreshCcw size={13} />}
+          </button>
+          <button
+            onClick={() => setNewChatOpen(true)}
+            disabled={!instanceId}
+            title="Nueva conversación"
+            className="w-8 h-8 rounded-[8px] flex items-center justify-center border border-[var(--border)] text-[var(--fg-tertiary)] hover:text-[var(--accent)] hover:border-[var(--accent)]/50 transition-colors disabled:opacity-40"
+          >
+            <SquarePen size={13} />
           </button>
         </div>
 
