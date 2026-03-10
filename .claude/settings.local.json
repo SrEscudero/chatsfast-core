@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx prisma migrate dev --name add_auth_fields)",
+      "Bash(npx prisma migrate dev)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(timeout 10 npm run dev)",
+      "Bash(curl -s -X POST http://localhost:3001/api/v1/auth/login -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"admin2@chatfast.io\"\",\"\"password\"\":\"\"Admin2026!!\"\"}\")",
+      "Bash(ACCESS=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5OTBhOTgxLTgwYzMtNGY1MS04MjVkLTFmNTkzZjExZWI3YyIsImVtYWlsIjoiYWRtaW4yQGNoYXRmYXN0LmlvIiwicm9sZSI6IkNMSUVOVCIsImlhdCI6MTc3MjkwNDUzNCwiZXhwIjoxNzcyOTA1NDM0fQ.C45EVxdN0eb3S9kp2CS9G-NZRrN0URNoQgPdd2Cr5v4\")",
+      "Bash(curl -s http://localhost:3001/api/v1/auth/me -H \"Authorization: Bearer $ACCESS\")",
+      "Bash(curl -s http://localhost:3001/api-docs/swagger.json)",
+      "Bash(curl -s \"http://localhost:3001/api-docs/swagger.json\" -H \"Accept: application/json\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.get\\(''paths'',{}\\).keys\\(\\)\\)[:10]\\)\")",
+      "Bash(curl -s \"http://localhost:3001/api/v1/ping\")",
+      "Bash(curl -s http://localhost:3001/api/v1/clients)",
+      "Bash(curl -s -X POST http://localhost:3001/api/v1/clients -H \"Content-Type: application/json\" -d \"{\"\"name\"\":\"\"Empresa Test\"\",\"\"email\"\":\"\"empresa@test.com\"\",\"\"password\"\":\"\"Empresa2026!!\"\",\"\"plan\"\":\"\"BASIC\"\"}\")",
+      "Bash(curl -s http://localhost:3001/api/v1/instances)",
+      "Bash(curl -sv http://localhost:3001/api/v1/instances)",
+      "Bash(curl -s http://localhost:3001/api/v1/ping)",
+      "Bash(npm install dockerode systeminformation)",
+      "Bash(npm install --save-dev @types/dockerode)",
+      "Bash(npm install @tanstack/react-query zustand framer-motion lucide-react clsx tailwind-merge axios)",
+      "Bash(npx tsx scripts/reset-and-seed.ts)",
+      "Bash(npx tsc:*)",
+      "Bash(python:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(npx jest:*)"
+    ]
+  }
+}

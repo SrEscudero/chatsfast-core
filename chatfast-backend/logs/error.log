@@ -1,0 +1,424 @@
+2026-03-06 16:08:26 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 16:08:27 [error]: Error creating instance
+2026-03-06 16:08:27 [error]: AxiosError: Request failed with status code 400
+    at settle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async InstanceService.createInstance (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:15:31)
+    at async create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:13:24)
+2026-03-06 16:12:25 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 16:12:25 [error]: Error creating instance
+2026-03-06 16:12:25 [error]: AxiosError: Request failed with status code 400
+    at settle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async InstanceService.createInstance (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:15:31)
+    at async create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:13:24)
+2026-03-06 16:17:29 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 16:17:29 [error]: Failed to setup webhook
+2026-03-06 16:23:19 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 16:23:19 [error]: Failed to setup webhook
+2026-03-06 16:23:33 [error]: Error creating instance
+2026-03-06 16:24:22 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 16:24:22 [error]: Failed to setup webhook
+2026-03-06 17:14:20 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-06 17:15:26 [error]: ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "uuid",
+    "pattern": "/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/",
+    "path": [
+      "params",
+      "id"
+    ],
+    "message": "El ID debe ser un UUID válido"
+  }
+]
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-06 17:16:30 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 17:16:30 [error]: Failed to setup webhook (non-fatal)
+2026-03-06 17:18:05 [error]: Error: No se pudo obtener el QR. La instancia puede estar ya conectada.
+    at InstanceService.getQRCode (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:285:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async getQR (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:96:22)
+2026-03-06 17:22:28 [error]: TypeError: fn is not a function
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\utils\asyncHandler.ts:7:21)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:13:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-03-06 17:24:35 [error]: TypeError: fn is not a function
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\utils\asyncHandler.ts:7:21)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:13:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-03-06 17:25:50 [error]: TypeError: fn is not a function
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\utils\asyncHandler.ts:7:21)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:13:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-03-06 17:32:01 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 17:32:01 [error]: Error: No se pudo actualizar el webhook: instance requires property "webhook"
+    at InstanceService.updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:473:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:259:22)
+2026-03-06 17:36:43 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 17:36:43 [error]: Error: No se pudo actualizar el webhook: webhook.events[3] is not one of enum values: APPLICATION_STARTUP,QRCODE_UPDATED,MESSAGES_SET,MESSAGES_UPSERT,MESSAGES_EDITED,MESSAGES_UPDATE,MESSAGES_DELETE,SEND_MESSAGE,SEND_MESSAGE_UPDATE,CONTACTS_SET,CONTACTS_UPSERT,CONTACTS_UPDATE,PRESENCE_UPDATE,CHATS_SET,CHATS_UPSERT,CHATS_UPDATE,CHATS_DELETE,GROUPS_UPSERT,GROUP_UPDATE,GROUP_PARTICIPANTS_UPDATE,CONNECTION_UPDATE,LABELS_EDIT,LABELS_ASSOCIATION,CALL,TYPEBOT_START,TYPEBOT_CHANGE_STATUS,REMOVE_INSTANCE,LOGOUT_INSTANCE,INSTANCE_CREATE,INSTANCE_DELETE,STATUS_INSTANCE
+    at InstanceService.updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:486:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:259:22)
+2026-03-06 17:41:44 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 17:41:44 [error]: Error: No se pudo actualizar el webhook: webhook.events[3] is not one of enum values: APPLICATION_STARTUP,QRCODE_UPDATED,MESSAGES_SET,MESSAGES_UPSERT,MESSAGES_EDITED,MESSAGES_UPDATE,MESSAGES_DELETE,SEND_MESSAGE,SEND_MESSAGE_UPDATE,CONTACTS_SET,CONTACTS_UPSERT,CONTACTS_UPDATE,PRESENCE_UPDATE,CHATS_SET,CHATS_UPSERT,CHATS_UPDATE,CHATS_DELETE,GROUPS_UPSERT,GROUP_UPDATE,GROUP_PARTICIPANTS_UPDATE,CONNECTION_UPDATE,LABELS_EDIT,LABELS_ASSOCIATION,CALL,TYPEBOT_START,TYPEBOT_CHANGE_STATUS,REMOVE_INSTANCE,LOGOUT_INSTANCE,INSTANCE_CREATE,INSTANCE_DELETE,STATUS_INSTANCE
+    at InstanceService.updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\instances.service.ts:482:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async updateWebhook (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\instances.controller.ts:259:22)
+2026-03-06 18:27:33 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-06 18:28:00 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-06 21:49:45 [error]: ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "regex",
+    "pattern": "/^[\\d]+(@s\\.whatsapp\\.net|@g\\.us)?$/",
+    "path": [
+      "body",
+      "number"
+    ],
+    "message": "Formato inválido. Usa solo dígitos o agrega @s.whatsapp.net"
+  }
+]
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:291:5)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\express-rate-limit\dist\index.cjs:947:7
+2026-03-06 21:49:49 [error]: ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "regex",
+    "pattern": "/^[\\d]+(@s\\.whatsapp\\.net|@g\\.us)?$/",
+    "path": [
+      "body",
+      "number"
+    ],
+    "message": "Formato inválido. Usa solo dígitos o agrega @s.whatsapp.net"
+  }
+]
+    at <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:291:5)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\express-rate-limit\dist\index.cjs:947:7
+2026-03-06 21:50:49 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:50:49 [error]: Evolution API error in sendPresence
+2026-03-06 21:50:49 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:68:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:146:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 21:51:05 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:51:05 [error]: Evolution API error in sendPresence
+2026-03-06 21:51:05 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:68:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:146:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 21:51:53 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:51:53 [error]: Evolution API error in sendPresence
+2026-03-06 21:51:53 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:68:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:146:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 21:52:45 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:52:45 [error]: Evolution API error in sendPresence
+2026-03-06 21:52:45 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:68:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:146:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 21:55:21 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:55:21 [error]: Evolution API error in sendPresence
+2026-03-06 21:55:21 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:68:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:146:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 21:57:58 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 21:57:58 [error]: Evolution API error in sendPresence
+2026-03-06 21:57:58 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:72:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:137:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 22:01:33 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 22:01:33 [error]: AppError: [object Object]
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:76:32)
+    at ChatService.sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:141:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async sendPresence (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:24:22)
+2026-03-06 22:11:03 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:11:03 [error]: AxiosError: Request failed with status code 404
+    at settle (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\settle.js:20:7)
+    at IncomingMessage.handleStreamEnd (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\adapters\http.js:844:13)
+    at IncomingMessage.emit (node:events:530:35)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\axios\lib\core\Axios.js:46:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:334:24)
+    at async withRetry (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:168:14)
+    at async ChatService.getProfilePicture (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\chat.service.ts:333:20)
+    at async getProfilePicture (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\chat.controller.ts:71:22)
+2026-03-06 22:20:53 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:20:53 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:21:37 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:21:37 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:22:18 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:22:18 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:22:23 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:22:23 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:22:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:22:34 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:25:25 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:25:25 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 22:26:13 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-06 22:26:13 [error]: [ChatService] Evolution API error in "getProfilePicture"
+2026-03-06 23:03:32 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-06 23:03:32 [error]: Evolution API sendReaction failed
+2026-03-06 23:35:15 [error]: SyntaxError: Unexpected token 'c', "curl -X 'P"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\body-parser\lib\types\json.js:109:10)
+    at parse (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\body-parser\lib\types\json.js:66:15)
+    at C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\body-parser\lib\read.js:162:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:518:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+2026-03-07 11:56:56 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-07 11:56:56 [error]: [FetchService] Evolution error in "fetchChats"
+2026-03-07 11:56:56 [error]: AppError: No encontrado: Cannot GET /chat/findChats/cliente_whatsapp_123
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:76:32)
+    at withRetry (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:96:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async FetchService.fetchChats (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:172:20)
+    at async fetchChats (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\fetch.controller.ts:19:22)
+2026-03-07 12:00:30 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-07 12:00:30 [error]: [FetchService] Evolution error in "fetchContacts"
+2026-03-07 12:00:30 [error]: AppError: No encontrado: Cannot GET /chat/findContacts/cliente_whatsapp_123
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:76:32)
+    at withRetry (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:96:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async FetchService.fetchContacts (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\fetch.service.ts:147:20)
+    at async fetchContacts (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\fetch.controller.ts:8:22)
+2026-03-07 12:19:12 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-07 12:19:13 [error]: [GroupsService] Evolution error in "updateSubject"
+2026-03-07 12:19:13 [error]: AppError: No encontrado: Cannot PUT /group/updateGroupSubject/cliente_whatsapp_123
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:105:32)
+    at withRetry (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:122:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async GroupsService.updateSubject (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:197:20)
+    at async updateSubject (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\groups.controller.ts:15:22)
+2026-03-07 12:28:46 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-07 12:28:47 [error]: [GroupsService] Evolution error in "removeParticipants"
+2026-03-07 12:28:47 [error]: AppError: Evolution rechazó los datos: Error updating participants, Error: internal-server-error
+    at toAppError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:102:32)
+    at withRetry (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:122:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async GroupsService.updateParticipants (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\groups.service.ts:299:20)
+    at async removeParticipants (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\groups.controller.ts:43:22)
+2026-03-07 14:58:00 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-07 14:58:53 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-07 14:59:15 [error]: TypeError: Cannot read properties of undefined (reading 'parseAsync')
+    at <anonymous> (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\validation.ts:7:20)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at authenticate (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\middleware\auth.ts:44:12)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at next (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\route.js:117:3)
+    at handle (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\lib\layer.js:152:17)
+    at c:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\router\index.js:295:15
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 15:00:24 [error]: ❌ Database connection failed
+2026-03-07 19:36:01 [error]: TypeError: Cannot read properties of undefined (reading 'length')
+    at CampaignService.create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\campaign.service.ts:68:33)
+    at async CampaignController.create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\campaign.controller.ts:36:24)
+2026-03-07 19:36:12 [error]: TypeError: Cannot read properties of undefined (reading 'length')
+    at CampaignService.create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\campaign.service.ts:68:33)
+    at async CampaignController.create (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\campaign.controller.ts:36:24)
+2026-03-07 19:46:27 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.instance.groupBy()` invocation in
+C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\admin.service.ts:69:23
+
+  66 prisma.client.count({ where: { active: true, suspended: false } }),
+  67 prisma.client.count({ where: { suspended: true } }),
+  68 prisma.client.groupBy({ by: ['plan'], _count: { _all: true } }),
+→ 69 prisma.instance.groupBy(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at ei.handleRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:228:13)
+    at ei.handleAndLogRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
+    at ei.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
+    at async a (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
+    at async Promise.all (index 4)
+    at async AdminService.getOverview (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\services\admin.service.ts:64:9)
+    at async AdminController.getOverview (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\controllers\admin.controller.ts:67:21)
+2026-03-07 19:47:24 [error]: PrismaClientValidationError: 
+Invalid `prisma.contact.update()` invocation in
+C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\routes\contacts.routes.ts:68:30
+
+  65 });
+  66 
+  67 if (existing) {
+→ 68   await prisma.contact.update({
+         where: {
+           id: "b619d73c-ad13-4d3f-8b6b-7c6f26366f27"
+         },
+         data: {
+       +   unreadCount: Int
+         }
+       })
+
+Argument `unreadCount` must not be null.
+    at throwValidationException (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:45:9)
+    at ei.handleRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:202:7)
+    at ei.handleAndLogRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
+    at ei.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
+    at async a (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\routes\contacts.routes.ts:68:9)
+2026-03-07 19:50:32 [error]: PrismaClientValidationError: 
+Invalid `prisma.contact.update()` invocation in
+C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\routes\contacts.routes.ts:68:30
+
+  65 });
+  66 
+  67 if (existing) {
+→ 68   await prisma.contact.update({
+         where: {
+           id: "b619d73c-ad13-4d3f-8b6b-7c6f26366f27"
+         },
+         data: {
+       +   unreadCount: Int
+         }
+       })
+
+Argument `unreadCount` must not be null.
+    at throwValidationException (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\core\errorRendering\throwValidationException.ts:45:9)
+    at ei.handleRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:202:7)
+    at ei.handleAndLogRequestError (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
+    at ei.request (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
+    at async a (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
+    at async <anonymous> (C:\Users\Kelvis\Documents\chatfast-core\chatfast-backend\src\routes\contacts.routes.ts:68:9)
+2026-03-07 21:22:21 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-09 22:32:34 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-09 22:36:44 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 22:36:44 [error]: Evolution API sendText failed
+2026-03-09 22:52:24 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 22:52:24 [error]: Evolution API sendText failed
+2026-03-09 23:25:03 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:25:03 [error]: Evolution API sendText failed
+2026-03-09 23:25:06 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:25:06 [error]: Evolution API sendText failed
+2026-03-09 23:25:33 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:25:33 [error]: Evolution API sendText failed
+2026-03-09 23:30:30 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:30:30 [error]: Evolution API sendText failed
+2026-03-09 23:32:49 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:32:49 [error]: Evolution API sendText failed | status=400 | recipient=117914669686804 | evolutionError={"status":400,"error":"Bad Request","response":{"message":[{"jid":"117914669686804@s.whatsapp.net","exists":false,"number":"117914669686804"}]}}
+2026-03-09 23:33:49 [error]: Evolution API Response Error Request failed with status code 400
+2026-03-09 23:33:50 [error]: Evolution API sendText failed | status=400 | recipient=117914669686804 | evolutionError={"status":400,"error":"Bad Request","response":{"message":[{"jid":"117914669686804@s.whatsapp.net","exists":false,"number":"117914669686804"}]}}
+2026-03-10 09:32:16 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 09:33:10 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 09:33:10 [error]: [FetchService] Evolution error in "fetchGroups"
+2026-03-10 09:59:32 [error]: Evolution API Response Error Request failed with status code 404
+2026-03-10 09:59:32 [error]: [FetchService] Evolution error in "fetchGroups"

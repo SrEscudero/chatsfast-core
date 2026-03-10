@@ -1,0 +1,236 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODELOS
+// ============================================
+
+model Client {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  phone         String?
+  role          Role      @default(CLIENT)
+  plan          Plan      @default(FREE)
+  planExpiresAt DateTime?
+  active        Boolean   @default(true)
+  suspended     Boolean   @default(false)
+  suspendedAt   DateTime?
+  instances     Instance[]
+  sessions      Session[]
+  campaigns     Campaign[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Instance {
+  id              String         @id @default(uuid())
+  name            String         @unique
+  evolutionApiId  String?
+  clientId        String
+  client          Client         @relation(fields: [clientId], references: [id])
+  status          InstanceStatus @default(DISCONNECTED)
+  connectionType  ConnectionType @default(BAILEYS)
+  webhookUrl      String?
+  apiKey          String
+  phoneNumber     String?
+  lastSeen        DateTime?
+  qrCode          String?        @db.Text
+  config          Json?          @default("{}")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  metrics         InstanceMetrics[]
+  events          Event[]
+  contacts        Contact[]
+  campaigns       Campaign[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([evolutionApiId])
+}
+
+model InstanceMetrics {
+  id          String   @id @default(uuid())
+  instanceId  String
+  instance    Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  messagesIn  Int      @default(0)
+  messagesOut Int      @default(0)
+  errors      Int      @default(0)
+  timestamp   DateTime @default(now())
+
+  @@index([instanceId, timestamp])
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  instanceId String
+  instance  Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  type      EventType
+  payload   Json     @db.JsonB
+  processed Boolean  @default(false)
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([instanceId, createdAt])
+  @@index([processed, createdAt])
+}
+
+model Contact {
+  id            String    @id @default(uuid())
+  instanceId    String
+  instance      Instance  @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  remoteJid     String
+  name          String?
+  phone         String?
+  profilePic    String?
+  isGroup       Boolean   @default(false)
+  lastMessage   String?
+  lastMessageAt DateTime?
+  unreadCount   Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  messages      Message[]
+
+  @@unique([instanceId, remoteJid])
+  @@index([instanceId])
+  @@index([instanceId, lastMessageAt])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  instanceId String
+  contactId  String
+  contact    Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  remoteJid  String
+  messageId  String
+  fromMe     Boolean  @default(false)
+  type       String   @default("text")
+  content    String?  @db.Text
+  mediaUrl   String?
+  caption    String?
+  status     String   @default("SENT")
+  timestamp  DateTime
+  createdAt  DateTime @default(now())
+
+  @@unique([instanceId, messageId])
+  @@index([instanceId, remoteJid, timestamp])
+  @@index([contactId])
+}
+
+model Campaign {
+  id          String         @id @default(uuid())
+  clientId    String
+  client      Client         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  instanceId  String
+  instance    Instance       @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  name        String
+  message     String         @db.Text
+  mediaUrl    String?
+  status      CampaignStatus @default(DRAFT)
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  totalCount  Int            @default(0)
+  sentCount   Int            @default(0)
+  failedCount Int            @default(0)
+  delayMs     Int            @default(1500)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  items       CampaignItem[]
+
+  @@index([clientId])
+  @@index([instanceId])
+  @@index([status])
+}
+
+model CampaignItem {
+  id         String             @id @default(uuid())
+  campaignId String
+  campaign   Campaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  phone      String
+  name       String?
+  status     CampaignItemStatus @default(PENDING)
+  sentAt     DateTime?
+  error      String?
+
+  @@index([campaignId])
+  @@index([campaignId, status])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  client    Client   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum Role {
+  ADMIN
+  OPERATOR
+  CLIENT
+}
+
+enum Plan {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
+}
+
+enum InstanceStatus {
+  PENDING
+  CONNECTING
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+enum ConnectionType {
+  BAILEYS
+  WHATSAPP_CLOUD
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum CampaignItemStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum EventType {
+  CONNECTION_UPDATE
+  MESSAGE_RECEIVED
+  MESSAGE_SENT
+  QR_CODE
+  ERROR
+  WEBHOOK
+}
